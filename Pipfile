@@ -8,6 +8,7 @@ django = "==3.2.8"
 python-dotenv = "*"
 whitenoise = "*"
 python-environ = "*"
+djangorestframework = "*"
 
 [dev-packages]
 
