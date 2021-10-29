@@ -17,5 +17,7 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-    path('authentication', AuthSpotify.as_view() , name-'spotify-authentication'),
+    path('', AuthSpotify.as_view() , name='spotify-authentication'),
+    path('authentication', AuthSpotify.as_view() , name='spotify-authentication'),
+    path('callback', callback, name='spotify-callback'),
 ]
