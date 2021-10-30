@@ -7,6 +7,7 @@ from django.utils import timezone
 from datetime import timedelta
 from rest_framework.views import APIView
 from requests import Request, post
+from .models import User
 
 # Request Authorization to access data
 class AuthSpotify(APIView):
