@@ -3,6 +3,8 @@
 
 from django.shortcuts import render, redirect
 from django.conf import settings
+from django.utils import timezone
+from datetime import timedelta
 from rest_framework.views import APIView
 from requests import Request, post
 
@@ -37,16 +39,39 @@ def callback(request, format=None):
 				'client_secret': settings.SPOTIFY_CLIENT_SECRET,
 			}).json()
 
-		# Response 
+		# Response with token data
 		access_token = response.get('access_token')
 		token_type = response.get('token_type')
 		expires_in = response.get('expires_in')
 		refresh_token = response.get('refresh_token')
 
-		return render(request, 'spotify/index.html')
+		# Create cookies with token data
+		response = redirect('spotify-home')
+		expires_in = timezone.now() + timedelta(seconds=expires_in)
+		cookie_max_age = 365*24*60*60
+
+		# Set Cookies
+		response.set_cookie('access_token', access_token, cookie_max_age, samesite='Lax')
+		# response.set_cookie('token_type', token_type, cookie_max_age)
+		response.set_cookie('expires_in', expires_in, cookie_max_age, samesite='Lax')
+		response.set_cookie('refresh_token', refresh_token, cookie_max_age, samesite='Lax')
+
+		# Create a session if one does not exist
+		if not request.session.exists(request.session.session_key):
+			request.session.create()
+
+		return response
 
 	elif error != None:
 		context = {
 			'error': error
 		}
 		return render(request, 'spotify/error.html', context)
+
+# Render Welcome Page (index.html)
+def welcome(request):
+	return render(request, 'spotify/index.html')
+
+# Render Home Page (home.html0
+def home(request):
+	return render(request, 'spotify/home.html')
