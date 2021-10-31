@@ -5,9 +5,14 @@ from django.shortcuts import render, redirect
 from django.conf import settings
 from django.utils import timezone
 from datetime import timedelta
+from rest_framework import status
 from rest_framework.views import APIView
-from requests import Request, post
+from rest_framework.response import Response
+from rest_framework.parsers import JSONParser
+from requests import Request, get, post, put
 from .models import User
+
+BASE_URL = "https://api.spotify.com/v1/me/"
 
 # Request Authorization to access data
 class AuthSpotify(APIView):
@@ -70,6 +75,21 @@ def callback(request, format=None):
 			'error': error
 		}
 		return render(request, 'spotify/error.html', context)
+
+# Execute an API request to the SPOTIFY API:
+class executeSpotifyAPIRequest(APIView):
+	parser_classes = [JSONParser]
+
+	def get(self, request, format=None):
+		access_token = request.data.get('access_token')
+		endpoint = request.data.get('endpoint')
+
+		# Creating headers
+		headers = {'Content-type': 'application/json',
+					'Authorization': 'Bearer ' + access_token}
+
+		response = get(BASE_URL + endpoint, {}, headers=headers).json()
+		return Response(response, status=status.HTTP_200_OK)
 
 # Template Rendering Views:
 

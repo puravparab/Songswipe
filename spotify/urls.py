@@ -21,4 +21,7 @@ urlpatterns = [
     path('home', home, name='spotify-home'),
     path('authentication', AuthSpotify.as_view() , name='spotify-authentication'),
     path('callback', callback, name='spotify-callback'),
+
+    # SPOTIFY APPLICATION API
+    path('api/execute/', executeSpotifyAPIRequest.as_view(), name='spotify-api-execute')
 ]
