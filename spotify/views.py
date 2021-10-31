@@ -46,7 +46,7 @@ def callback(request, format=None):
 		expires_in = response.get('expires_in')
 		refresh_token = response.get('refresh_token')
 
-		# Create cookies with token data
+		# Create cookies with token data:
 		response = redirect('spotify-home')
 		expires_in = timezone.now() + timedelta(seconds=expires_in)
 		cookie_max_age = 365*24*60*60
@@ -61,6 +61,8 @@ def callback(request, format=None):
 		if not request.session.exists(request.session.session_key):
 			request.session.create()
 
+		# Connect User Model here
+
 		return response
 
 	elif error != None:
@@ -68,6 +70,8 @@ def callback(request, format=None):
 			'error': error
 		}
 		return render(request, 'spotify/error.html', context)
+
+# Template Rendering Views:
 
 # Render Welcome Page (index.html)
 def welcome(request):
