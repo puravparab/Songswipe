@@ -15,3 +15,5 @@ class User(models.Model):
 	spotify_uri = models.CharField(max_length=150, unique=True, null=True)
 	# Time user entry was created 
 	created_at = models.DateTimeField(auto_now_add=True, auto_now=False)
+	# No of visits
+	visits = models.PositiveIntegerField(null=True)

@@ -75,6 +75,8 @@ def callback(request, format=None):
 
 # Render Welcome Page (index.html)
 def welcome(request):
+	if not request.session.exists(request.session.session_key):
+		request.session.create()
 	return render(request, 'spotify/index.html')
 
 # Render Home Page (home.html0
