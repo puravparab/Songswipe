@@ -9,8 +9,10 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
+from rest_framework.decorators import api_view, parser_classes
 from requests import Request, get, post, put
 from .models import User
+from .utils import *
 
 BASE_URL = "https://api.spotify.com/v1/"
 
@@ -96,6 +98,39 @@ class executeSpotifyAPIRequest(APIView):
 		else:
 			return Response(response.json(), status=status.HTTP_400_BAD_REQUEST)
 
+# Views that request specific information from executeSpotifyAPIRequest view:
+
+# Request User Profile
+@api_view(["GET"])
+@parser_classes([JSONParser])
+def currentUserProfile(request, format=None):
+	if request.method == 'GET':
+		access_token = request.data.get('access_token')
+		refresh_token = request.data.get('refresh_token')
+		expires_in = request.data.get('expires_in')
+		# Create tokens to pass into isSpotifyAuthenicated function
+		tokens = {
+			'access_token': access_token,
+			'refresh_token': refresh_token,
+			'expires_in': expires_in
+		}
+		if isSpotifyAuthenticated(tokens):
+			tokens = {
+				'access_token': access_token,
+				'endpoint': 'me'
+			}
+			headers = {'Content-type': 'application/json'}
+			# Send get request to execute api
+			response = get('http://192.168.1.101:8000/spotify/api/execute/',
+				 json=tokens, headers=headers)
+			if(response.ok == True):
+				return Response(response.json(), status=status.HTTP_200_OK)
+			else:
+				return Response(response.json(), status=status.HTTP_400_BAD_REQUEST)
+		else:
+			# TODO: Auth = False
+			return
+			
 # Template Rendering Views:
 
 # Render Welcome Page (index.html)

@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.utils import timezone
-from datetime import timedelta
+from datetime import datetime, timedelta
 from requests import post
 
 # Checks if spotify is authenticated
@@ -8,8 +8,8 @@ def isSpotifyAuthenticated(tokens):
 	access_token = tokens.get('access_token')
 	refresh_token = tokens.get('refresh_token')
 	expires_in = tokens.get('expires_in')
-	if expires_in <= timezone.now() || expires_in == None || 
-		access_token == None || refresh_token == None:
+	expires_in = datetime.fromisoformat(expires_in)
+	if (expires_in <= timezone.now()) or (expires_in == None) or (access_token == None) or (refresh_token == None):
 		return False
 	else:
 		return True
@@ -25,7 +25,7 @@ def refreshSpotifyToken(refresh_token):
 		}).json()
 
 	tokens = {
-		'access_token': response.get('access_token')
+		'access_token': response.get('access_token'),
 		'expires_in': timezone.now() + timedelta(seconds=response.get('expires_in'))
 	}
 	return tokens
