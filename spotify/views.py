@@ -12,7 +12,7 @@ from rest_framework.parsers import JSONParser
 from requests import Request, get, post, put
 from .models import User
 
-BASE_URL = "https://api.spotify.com/v1/me/"
+BASE_URL = "https://api.spotify.com/v1/"
 
 # Request Authorization to access data
 class AuthSpotify(APIView):
@@ -88,8 +88,13 @@ class executeSpotifyAPIRequest(APIView):
 		headers = {'Content-type': 'application/json',
 					'Authorization': 'Bearer ' + access_token}
 
-		response = get(BASE_URL + endpoint, {}, headers=headers).json()
-		return Response(response, status=status.HTTP_200_OK)
+		# request the Spotify API at the endpoint
+		response = get(BASE_URL + endpoint, {}, headers=headers)
+
+		if(response.ok == True):
+			return Response(response.json(), status=status.HTTP_200_OK)
+		else:
+			return Response(response.json(), status=status.HTTP_400_BAD_REQUEST)
 
 # Template Rendering Views:
 
