@@ -129,14 +129,29 @@ def currentUserProfile(request, format=None):
 			'endpoint': 'me'
 		}
 		headers = {'Content-type': 'application/json'}
-		response = get('http://192.168.1.101:8000/spotify/api/execute/',
+		try:
+			spotifyResponse = get('http://192.168.1.101:8000/spotify/api/execute/',
 			 json=tokens, headers=headers)
+		except:
+			return Response({'error: call to executeSpotifyAPIRequest'}, status=status.HTTP_400_BAD_REQUEST)
 
-		# TODO: Clean response before returning
-		if(response.ok == True):
-			return Response(response.json(), status=status.HTTP_200_OK)
+		# Process spotifyResponse
+		if(spotifyResponse.ok == True):
+			# Clean JSON Response
+			spotifyResponse = spotifyResponse.json()
+			response = {
+				'access_token': access_token,
+				'expires_in': expires_in,
+				'display_name': spotifyResponse.get('display_name'),
+				'followers': spotifyResponse.get('followers').get('total'),
+				'spotify_href': spotifyResponse.get('href'),
+				'spotify_id': spotifyResponse.get('id'),
+				'image': spotifyResponse.get('images')[0].get('url'),
+				'spotify_uri': spotifyResponse.get('uri')
+			}
+			return Response(response, status=status.HTTP_200_OK)
 		else:
-			return Response(response.json(), status=status.HTTP_400_BAD_REQUEST)
+			return Response(spotifyResponse.json(), status=status.HTTP_400_BAD_REQUEST)
 
 # 
 # Template Rendering Views:
