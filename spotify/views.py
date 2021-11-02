@@ -98,7 +98,9 @@ class executeSpotifyAPIRequest(APIView):
 		else:
 			return Response(response.json(), status=status.HTTP_400_BAD_REQUEST)
 
-# Views that request specific information from executeSpotifyAPIRequest view:
+# 
+# Views that request specific information from executeSpotifyAPIRequest:
+# 
 
 # Request User Profile
 @api_view(["GET"])
@@ -114,24 +116,31 @@ def currentUserProfile(request, format=None):
 			'refresh_token': refresh_token,
 			'expires_in': expires_in
 		}
-		if isSpotifyAuthenticated(tokens):
-			tokens = {
-				'access_token': access_token,
-				'endpoint': 'me'
-			}
-			headers = {'Content-type': 'application/json'}
-			# Send get request to execute api
-			response = get('http://192.168.1.101:8000/spotify/api/execute/',
-				 json=tokens, headers=headers)
-			if(response.ok == True):
-				return Response(response.json(), status=status.HTTP_200_OK)
-			else:
-				return Response(response.json(), status=status.HTTP_400_BAD_REQUEST)
+		newTokens = checkSpotifyAuthentication(tokens)
+		if(newTokens == None):
+			pass
 		else:
-			# TODO: Auth = False
-			return
-			
+			access_token = newTokens.get('access_token')
+			expires_in = newTokens.get('expires_in')
+
+		# Send get request to execute api
+		tokens = {
+			'access_token': access_token,
+			'endpoint': 'me'
+		}
+		headers = {'Content-type': 'application/json'}
+		response = get('http://192.168.1.101:8000/spotify/api/execute/',
+			 json=tokens, headers=headers)
+
+		# TODO: Clean response before returning
+		if(response.ok == True):
+			return Response(response.json(), status=status.HTTP_200_OK)
+		else:
+			return Response(response.json(), status=status.HTTP_400_BAD_REQUEST)
+
+# 
 # Template Rendering Views:
+# 
 
 # Render Welcome Page (index.html)
 def welcome(request):
