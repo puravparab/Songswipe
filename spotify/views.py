@@ -70,29 +70,25 @@ def callback(request, format=None):
 		if(userData.ok):
 			userData = userData.json()
 			userProfile = User.objects.filter(spotify_id=userData.get('spotify_id'))
-			# TODO: Fix User models integration
-
-			# if userProfile:
-			# 	userProfile.display_name = userData.get('display_name')
-			# 	userProfile.email = userData.get('email')
-			# 	userProfile.spotify_href = userData.get('spotify_href')
-			# 	userProfile.spotify_uri = userData.get('spotify_uri')
-			# 	# print(userProfile.no_of_visits)
-			# 	# userProfile.no_of_visits = userProfile.no_of_visits + 1
-			# 	userProfile.save(update_fields=['display_name', 'email',
-			# 		'spotify_href', 'spotify_uri'])
-
-			# else:
-			# 	userProfile = User(
-			# 		display_name = userData.get('display_name'),
-			# 		email = userData.get('email'),
-			# 		spotify_id = userData.get('spotify_id'),
-			# 		spotify_href = userData.get('spotify_href'),
-			# 		spotify_uri = userData.get('spotify_uri'),
-			# 		# no_of_visits = 1
-			# 		)
-			# 	# print(userProfile.no_of_visits)
-			# 	userProfile.save()
+			if userProfile:
+				userProfile = userProfile[0]
+				userProfile.display_name = userData.get('display_name')
+				userProfile.email = userData.get('email')
+				userProfile.spotify_href = userData.get('spotify_href')
+				userProfile.spotify_uri = userData.get('spotify_uri')
+				userProfile.no_of_visits = userProfile.no_of_visits + 1
+				userProfile.save(update_fields=['display_name', 'email',
+					'spotify_href', 'spotify_uri', 'no_of_visits'])
+			else:
+				userProfile = User(
+					display_name = userData.get('display_name'),
+					email = userData.get('email'),
+					spotify_id = userData.get('spotify_id'),
+					spotify_href = userData.get('spotify_href'),
+					spotify_uri = userData.get('spotify_uri'),
+					no_of_visits = 1
+					)
+				userProfile.save()
 			user_cover_image = userData.get('image')
 		else:
 			return redirect('spotify-index')
