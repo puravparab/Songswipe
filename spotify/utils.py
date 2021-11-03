@@ -34,6 +34,6 @@ def refreshSpotifyToken(refresh_token):
 		}).json()
 	tokens = {
 		'access_token': response.get('access_token'),
-		'expires_in': timezone.now() + timedelta(seconds=response.get('expires_in'))
+		'expires_in': str(timezone.now() + timedelta(seconds=response.get('expires_in')))
 	}
 	return tokens

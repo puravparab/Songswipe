@@ -50,25 +50,61 @@ def callback(request, format=None):
 		# Response with token data
 		access_token = response.get('access_token')
 		token_type = response.get('token_type')
-		expires_in = response.get('expires_in')
+		expires_in = str(timezone.now() + timedelta(seconds=response.get('expires_in')))
 		refresh_token = response.get('refresh_token')
-
-		# Create cookies with token data:
-		response = redirect('spotify-home')
-		expires_in = timezone.now() + timedelta(seconds=expires_in)
-		cookie_max_age = 365*24*60*60
-
-		# Set Cookies
-		response.set_cookie('access_token', access_token, cookie_max_age, samesite='Lax')
-		# response.set_cookie('token_type', token_type, cookie_max_age)
-		response.set_cookie('expires_in', expires_in, cookie_max_age, samesite='Lax')
-		response.set_cookie('refresh_token', refresh_token, cookie_max_age, samesite='Lax')
 
 		# Create a session if one does not exist
 		if not request.session.exists(request.session.session_key):
 			request.session.create()
 
 		# Connect User Model here
+		userData = get('http://192.168.1.101:8000/spotify/api/user/',
+			json={
+				'access_token': access_token,
+				'refresh_token': refresh_token,
+				'expires_in': expires_in
+			}, 
+			headers={
+				'Content-type': 'application/json'
+			})
+		if(userData.ok):
+			userData = userData.json()
+			userProfile = User.objects.filter(spotify_id=userData.get('spotify_id'))
+			# TODO: Fix User models integration
+
+			# if userProfile:
+			# 	userProfile.display_name = userData.get('display_name')
+			# 	userProfile.email = userData.get('email')
+			# 	userProfile.spotify_href = userData.get('spotify_href')
+			# 	userProfile.spotify_uri = userData.get('spotify_uri')
+			# 	# print(userProfile.no_of_visits)
+			# 	# userProfile.no_of_visits = userProfile.no_of_visits + 1
+			# 	userProfile.save(update_fields=['display_name', 'email',
+			# 		'spotify_href', 'spotify_uri'])
+
+			# else:
+			# 	userProfile = User(
+			# 		display_name = userData.get('display_name'),
+			# 		email = userData.get('email'),
+			# 		spotify_id = userData.get('spotify_id'),
+			# 		spotify_href = userData.get('spotify_href'),
+			# 		spotify_uri = userData.get('spotify_uri'),
+			# 		# no_of_visits = 1
+			# 		)
+			# 	# print(userProfile.no_of_visits)
+			# 	userProfile.save()
+			user_cover_image = userData.get('image')
+		else:
+			return redirect('spotify-index')
+
+		# Create cookies with token data:
+		response = redirect('spotify-home')
+		cookie_max_age = 365*24*60*60
+		# Set Cookies
+		response.set_cookie('access_token', access_token, cookie_max_age, samesite='Lax')
+		response.set_cookie('expires_in', expires_in, cookie_max_age, samesite='Lax')
+		response.set_cookie('refresh_token', refresh_token, cookie_max_age, samesite='Lax')
+		response.set_cookie('user_cover_image', user_cover_image, cookie_max_age, samesite='Lax')
 
 		return response
 
@@ -107,15 +143,19 @@ class executeSpotifyAPIRequest(APIView):
 @parser_classes([JSONParser])
 def currentUserProfile(request, format=None):
 	if request.method == 'GET':
+
 		access_token = request.data.get('access_token')
 		refresh_token = request.data.get('refresh_token')
 		expires_in = request.data.get('expires_in')
+
 		# Create tokens to pass into isSpotifyAuthenicated function
 		tokens = {
 			'access_token': access_token,
 			'refresh_token': refresh_token,
 			'expires_in': expires_in
 		}
+
+		# Check if Spotify is authenticated
 		newTokens = checkSpotifyAuthentication(tokens)
 		if(newTokens == None):
 			pass
@@ -131,12 +171,12 @@ def currentUserProfile(request, format=None):
 		headers = {'Content-type': 'application/json'}
 		try:
 			spotifyResponse = get('http://192.168.1.101:8000/spotify/api/execute/',
-			 json=tokens, headers=headers)
+				json=tokens, headers=headers)
 		except:
-			return Response({'error: call to executeSpotifyAPIRequest'}, status=status.HTTP_400_BAD_REQUEST)
+			return Response({'error: Call to executeSpotifyAPIRequest Failed'}, status=status.HTTP_400_BAD_REQUEST)
 
 		# Process spotifyResponse
-		if(spotifyResponse.ok == True):
+		if(spotifyResponse.ok):
 			# Clean JSON Response
 			spotifyResponse = spotifyResponse.json()
 			response = {

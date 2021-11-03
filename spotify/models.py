@@ -2,7 +2,8 @@ from django.db import models
 
 class User(models.Model):
 	# session_id
-	user = models.CharField(max_length=60, unique=True, null=True)
+	# user = models.CharField(max_length=60, unique=True, null=True)
+
 	# User's Spotify display name
 	display_name = models.CharField(max_length=150, null=True)
 	# Email associated witn the users spotify account
@@ -16,4 +17,7 @@ class User(models.Model):
 	# Time user entry was created 
 	created_at = models.DateTimeField(auto_now_add=True, auto_now=False)
 	# No of visits
-	visits = models.PositiveIntegerField(null=True)
+	no_of_visits = models.PositiveIntegerField(null=True)
+
+	def __str__(self):
+		return (f"{self.spotify_id} (id:{self.id})")

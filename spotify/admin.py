@@ -3,7 +3,7 @@ from .models import User
 
 @admin.register(User)
 class User(admin.ModelAdmin):
-	list_display = ('display_name', 'spotify_id', 'email', 'user',
-		'spotify_uri', 'created_at')
-	fields =['user', 'display_name', 'email', 'spotify_id',
-		'spotify_href', 'spotify_uri', 'created_at']
+	list_display = ('spotify_id', 'display_name', 'email',
+		'spotify_uri', 'created_at', 'no_of_visits')
+	fields =['display_name', 'email', 'spotify_id',
+		'spotify_href', 'spotify_uri', 'no_of_visits']
