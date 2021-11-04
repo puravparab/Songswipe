@@ -19,7 +19,7 @@ BASE_URL = "https://api.spotify.com/v1/"
 # Request Authorization to access data
 class AuthSpotify(APIView):
 	def get(self, request, format=None):
-		scopes = '' 
+		scopes = 'user-read-email' 
 		url = Request('GET', 'https://accounts.spotify.com/authorize',
 			params={
 				'client_id': settings.SPOTIFY_CLIENT_ID,
@@ -179,6 +179,7 @@ def currentUserProfile(request, format=None):
 				'access_token': access_token,
 				'expires_in': expires_in,
 				'display_name': spotifyResponse.get('display_name'),
+				'email': spotifyResponse.get('email'),
 				'followers': spotifyResponse.get('followers').get('total'),
 				'spotify_href': spotifyResponse.get('href'),
 				'spotify_id': spotifyResponse.get('id'),
