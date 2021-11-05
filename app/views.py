@@ -1,18 +1,22 @@
 from django.shortcuts import render, redirect
+from .models import User
 from spotify.utils import checkSpotifyAuthentication
+
 
 # Template Rendering Views:
 def welcome(request):
 	access_token = request.COOKIES.get('access_token')
 	refresh_token = request.COOKIES.get('refresh_token')
 	expires_in = request.COOKIES.get('expires_in')
+	spotify_id = request.COOKIES.get('spotify_id')
+	user_cover_image = request.COOKIES.get('user_cover_image')
 
 	tokens = {
 		'access_token': access_token,
 		'refresh_token': refresh_token,
 		'expires_in': expires_in
 	}
-	if(access_token != None and refresh_token != None and expires_in != None):
+	if(access_token != None and refresh_token != None and expires_in != None and spotify_id != None and user_cover_image != None):
 		newTokens = checkSpotifyAuthentication(tokens)
 		if(newTokens == None):
 			pass
@@ -27,7 +31,8 @@ def welcome(request):
 		response.set_cookie('access_token', access_token, cookie_max_age, samesite='Lax')
 		response.set_cookie('refresh_token', refresh_token, cookie_max_age, samesite='Lax')
 		response.set_cookie('expires_in', expires_in, cookie_max_age, samesite='Lax')
-		response.set_cookie('test', 'test', cookie_max_age, samesite='Lax')
+		response.set_cookie('spotify_id', spotify_id, cookie_max_age, samesite='Lax')
+		response.set_cookie('user_cover_image', user_cover_image, cookie_max_age, samesite='Lax')
 		return response
 	else:
 		return render(request, 'app/welcome.html') 
