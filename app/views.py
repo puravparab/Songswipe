@@ -24,6 +24,15 @@ def welcome(request):
 			access_token = newTokens.get('access_token')
 			expires_in = newTokens.get('expires_in')
 
+		# Increment no_of_visits in User model
+		userProfile = User.objects.filter(spotify_id=spotify_id)
+		if userProfile:
+				userProfile = userProfile[0]
+				userProfile.no_of_visits = userProfile.no_of_visits + 1
+				userProfile.save(update_fields=['no_of_visits'])
+		else:
+			return render(request, 'app/welcome.html') 
+
 		# Create cookies with token data:
 		response = redirect('main-app:app-home')
 		cookie_max_age = 365*24*60*60
