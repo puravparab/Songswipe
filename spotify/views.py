@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from rest_framework.decorators import api_view, parser_classes
 from requests import Request, get, post, put
-from .models import User
+from app.models import User
 from .utils import *
 
 BASE_URL = "https://api.spotify.com/v1/"
@@ -91,15 +91,16 @@ def callback(request, format=None):
 				userProfile.save()
 			user_cover_image = userData.get('image')
 		else:
-			return redirect('spotify-index')
+			return redirect('main-app:app-welcome')
 
 		# Create cookies with token data:
-		response = redirect('spotify-home')
+		response = redirect('main-app:app-home')
 		cookie_max_age = 365*24*60*60
 		# Set Cookies
 		response.set_cookie('access_token', access_token, cookie_max_age, samesite='Lax')
 		response.set_cookie('expires_in', expires_in, cookie_max_age, samesite='Lax')
 		response.set_cookie('refresh_token', refresh_token, cookie_max_age, samesite='Lax')
+		response.set_cookie('spotify_id', userData.get('spotify_id'), cookie_max_age, samesite='Lax')
 		response.set_cookie('user_cover_image', user_cover_image, cookie_max_age, samesite='Lax')
 
 		return response

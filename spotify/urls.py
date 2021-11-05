@@ -16,6 +16,8 @@ Including another URLconf
 from django.urls import path
 from .views import *
 
+app_name = 'spotify'
+
 urlpatterns = [
     path('', welcome , name='spotify-index'),
     path('home', home, name='spotify-home'),
