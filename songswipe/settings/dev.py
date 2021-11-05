@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'rest_framework',
 
     # Created Apps
+    'app.apps.AppConfig',
     'spotify.apps.SpotifyConfig',
 
 ]
