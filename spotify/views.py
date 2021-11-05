@@ -91,10 +91,10 @@ def callback(request, format=None):
 				userProfile.save()
 			user_cover_image = userData.get('image')
 		else:
-			return redirect('spotify:spotify-index')
+			return redirect('main-app:app-welcome')
 
 		# Create cookies with token data:
-		response = redirect('spotify:spotify-home')
+		response = redirect('main-app:app-home')
 		cookie_max_age = 365*24*60*60
 		# Set Cookies
 		response.set_cookie('access_token', access_token, cookie_max_age, samesite='Lax')
