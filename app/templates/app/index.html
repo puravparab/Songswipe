@@ -1,0 +1,26 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="theme-color" content=""/>
+		<meta name="robots" content="index,follow">
+
+		{% block meta %}
+		{% endblock %}
+
+		<link rel="stylesheet" href="{% static 'app/css/index.css' %}">
+	</head>
+	<body>
+		{% block header %}
+		{% endblock%}
+
+		<div class="main">
+			{% block content %}
+			{% endblock %}
+		</div>
+	</body>
+</html>

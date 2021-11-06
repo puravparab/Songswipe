@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from .models import User
 from spotify.utils import checkSpotifyAuthentication
 
-
 # Template Rendering Views:
 def welcome(request):
 	access_token = request.COOKIES.get('access_token')
