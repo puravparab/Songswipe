@@ -14,8 +14,6 @@ from requests import Request, get, post, put
 from app.models import User
 from .utils import *
 
-BASE_URL = "https://api.spotify.com/v1/"
-
 # Request Authorization to access data
 class AuthSpotify(APIView):
 	def get(self, request, format=None):
@@ -58,7 +56,8 @@ def callback(request, format=None):
 			request.session.create()
 
 		# Connect User Model here
-		userData = get('http://192.168.1.101:8000/spotify/api/user/',
+		ROOT_URL = request.build_absolute_uri('/')
+		userData = get((f'{ROOT_URL}spotify/api/user/'),
 			json={
 				'access_token': access_token,
 				'refresh_token': refresh_token,
@@ -119,10 +118,10 @@ class executeSpotifyAPIRequest(APIView):
 		access_token = request.data.get('access_token')
 		endpoint = request.data.get('endpoint')
 
+		BASE_URL = "https://api.spotify.com/v1/"
 		# Creating headers
 		headers = {'Content-type': 'application/json',
 					'Authorization': 'Bearer ' + access_token}
-
 		# request the Spotify API at the endpoint
 		response = get(BASE_URL + endpoint, {}, headers=headers)
 
@@ -167,7 +166,8 @@ def currentUserProfile(request, format=None):
 		}
 		headers = {'Content-type': 'application/json'}
 		try:
-			spotifyResponse = get('http://192.168.1.101:8000/spotify/api/execute/',
+			ROOT_URL = request.build_absolute_uri('/')
+			spotifyResponse = get((f'{ROOT_URL}spotify/api/execute/'),
 				json=tokens, headers=headers)
 		except:
 			return Response({'error: Call to executeSpotifyAPIRequest Failed'}, status=status.HTTP_400_BAD_REQUEST)
@@ -201,6 +201,6 @@ def welcome(request):
 		request.session.create()
 	return render(request, 'spotify/index.html')
 
-# Render Home Page (home.html0
+# Render Home Page (home.html)
 def home(request):
 	return render(request, 'spotify/home.html')
