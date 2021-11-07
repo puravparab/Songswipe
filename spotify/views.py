@@ -17,7 +17,7 @@ from .utils import *
 # Request Authorization to access data
 class AuthSpotify(APIView):
 	def get(self, request, format=None):
-		scopes = 'user-read-email' 
+		scopes = 'user-read-email user-library-read' 
 		url = Request('GET', 'https://accounts.spotify.com/authorize',
 			params={
 				'client_id': settings.SPOTIFY_CLIENT_ID,
@@ -54,6 +54,8 @@ def callback(request, format=None):
 		# Create a session if one does not exist
 		if not request.session.exists(request.session.session_key):
 			request.session.create()
+
+		# TODO: REDUCE API REQUESTS. ADD Auth check before API call
 
 		# Connect User Model here
 		ROOT_URL = request.build_absolute_uri('/')
@@ -132,9 +134,11 @@ class executeSpotifyAPIRequest(APIView):
 
 # 
 # Views that request specific information from executeSpotifyAPIRequest:
-# 
+#
 
 # Request User Profile
+# https://developer.spotify.com/documentation/web-api/reference/#/operations/get-current-users-profile
+# TODO: REFACTOR TO CLASS BASED VIEW
 @api_view(["GET"])
 @parser_classes([JSONParser])
 def currentUserProfile(request, format=None):
@@ -144,7 +148,7 @@ def currentUserProfile(request, format=None):
 		refresh_token = request.data.get('refresh_token')
 		expires_in = request.data.get('expires_in')
 
-		# Create tokens to pass into isSpotifyAuthenicated function
+		# Create tokens to pass into checkSpotifyAuthenticated function
 		tokens = {
 			'access_token': access_token,
 			'refresh_token': refresh_token,
@@ -170,7 +174,7 @@ def currentUserProfile(request, format=None):
 			spotifyResponse = get((f'{ROOT_URL}spotify/api/execute/'),
 				json=tokens, headers=headers)
 		except:
-			return Response({'error: Call to executeSpotifyAPIRequest Failed'}, status=status.HTTP_400_BAD_REQUEST)
+			return Response({'Error: Call to executeSpotifyAPIRequest Failed'}, status=status.HTTP_400_BAD_REQUEST)
 
 		# Process spotifyResponse
 		if(spotifyResponse.ok):
@@ -190,6 +194,54 @@ def currentUserProfile(request, format=None):
 			return Response(response, status=status.HTTP_200_OK)
 		else:
 			return Response(spotifyResponse.json(), status=status.HTTP_400_BAD_REQUEST)
+
+# Get user's saved tracks
+# https://developer.spotify.com/documentation/web-api/reference/#/operations/get-users-saved-tracks
+class userSavedTracks(APIView):
+	parser_classes = [JSONParser]
+	def get(self, request, format=None):
+		newTokens = self.authCheck(request.data)
+		if(newTokens == None):
+			access_token = request.data.get('access_token')
+			refresh_token = request.data.get('refresh_token')
+			expires_in = request.data.get('expires_in')
+		else:
+			access_token = newTokens.get('access_token')
+			refresh_token = request.data.get('refresh_token')
+			expires_in = newTokens.get('expires_in')
+
+		# Send get request to execute api
+		tokens = {
+			'access_token': access_token,
+			'endpoint': 'me/tracks'
+		}
+		headers = {'Content-type': 'application/json'}
+		try:
+			ROOT_URL = request.build_absolute_uri('/')
+			spotifyResponse = get((f'{ROOT_URL}spotify/api/execute/'),
+				json=tokens, headers=headers)
+		except:
+			return Response({'Error: Call to executeSpotifyAPIRequest Failed'}, status=status.HTTP_400_BAD_REQUEST)
+
+		if(spotifyResponse.ok):
+			# TODO: CLEAN spotifyResponse
+			return Response(spotifyResponse.json(), status=status.HTTP_200_OK)
+		else:
+			return Response(spotifyResponse.json(), status=status.HTTP_400_BAD_REQUEST)
+
+	def authCheck(self, tokens):
+		access_token = tokens.get('access_token')
+		refresh_token = tokens.get('refresh_token')
+		expires_in = tokens.get('expires_in')
+		# Create tokens to pass into checkSpotifyAuthenticated function
+		tokens = {
+			'access_token': access_token,
+			'refresh_token': refresh_token,
+			'expires_in': expires_in
+		}
+		# Check if Spotify is authenticated
+		newTokens = checkSpotifyAuthentication(tokens)
+		return newTokens
 
 # 
 # Template Rendering Views:

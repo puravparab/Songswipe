@@ -27,4 +27,5 @@ urlpatterns = [
     # SPOTIFY APPLICATION API
     path('api/execute/', executeSpotifyAPIRequest.as_view(), name='spotify-api-execute'),
     path('api/user/', currentUserProfile, name='spotify-api-user'),
+    path('api/user/saved-tracks/', userSavedTracks.as_view(), name='spotify-api-user-saved-tracks'),
 ]
