@@ -124,9 +124,13 @@ class executeSpotifyAPIRequest(APIView):
 		# Creating headers
 		headers = {'Content-type': 'application/json',
 					'Authorization': 'Bearer ' + access_token}
+		# Creating url parameters
+		params = {
+			'limit': request.data.get('limit'),
+			'offset': request.data.get('offset')
+		}
 		# request the Spotify API at the endpoint
-		response = get(BASE_URL + endpoint, {}, headers=headers)
-
+		response = get(BASE_URL + endpoint, headers=headers, params=params)
 		if(response.ok == True):
 			return Response(response.json(), status=status.HTTP_200_OK)
 		else:
@@ -199,7 +203,7 @@ def currentUserProfile(request, format=None):
 # https://developer.spotify.com/documentation/web-api/reference/#/operations/get-users-saved-tracks
 class userSavedTracks(APIView):
 	parser_classes = [JSONParser]
-	def get(self, request, format=None):
+	def get(self, request, limit, offset):
 		newTokens = self.authCheck(request.data)
 		if(newTokens == None):
 			access_token = request.data.get('access_token')
@@ -213,7 +217,9 @@ class userSavedTracks(APIView):
 		# Send get request to execute api
 		tokens = {
 			'access_token': access_token,
-			'endpoint': 'me/tracks'
+			'endpoint': 'me/tracks',
+			'limit': str(limit),
+			'offset': str(offset)
 		}
 		headers = {'Content-type': 'application/json'}
 		try:
