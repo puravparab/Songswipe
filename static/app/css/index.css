@@ -6,6 +6,26 @@
 body{
 	margin: 0;
 }
+.main{
+	width: 90%;
+	margin: auto;
+}
+@media screen and (min-width: 650px){
+	.main{
+		width: 80%;
+	}
+}
+@media screen and (min-width: 1080px){
+	.main{
+		width: 70%;
+	}
+}
+
+@media screen and (min-width: 1240px){
+	.main{
+		width: 60%;
+	}
+}
 
 /*Styles for welcome.html*/
 .welcome-container{
