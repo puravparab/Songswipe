@@ -230,11 +230,14 @@ class userSavedTracks(APIView):
 			return Response({'Error: Call to executeSpotifyAPIRequest Failed'}, status=status.HTTP_400_BAD_REQUEST)
 
 		if(spotifyResponse.ok):
-			# TODO: CLEAN spotifyResponse
-			return Response(spotifyResponse.json(), status=status.HTTP_200_OK)
+			response = self.cleanResponse(spotifyResponse.json())
+			response['access_token'] = access_token
+			response['expires_in'] = expires_in
+			return Response(response, status=status.HTTP_200_OK)
 		else:
 			return Response(spotifyResponse.json(), status=status.HTTP_400_BAD_REQUEST)
 
+	# Validate tokens
 	def authCheck(self, tokens):
 		access_token = tokens.get('access_token')
 		refresh_token = tokens.get('refresh_token')
@@ -248,6 +251,60 @@ class userSavedTracks(APIView):
 		# Check if Spotify is authenticated
 		newTokens = checkSpotifyAuthentication(tokens)
 		return newTokens
+
+	# Cleans data saved track data from spotify 
+	def cleanResponse(self, jsonData):
+		count = 0
+		items = []
+		for item in jsonData.get('items'):
+			count = count + 1
+			# Store track metadata
+			track = {
+				'name': item.get('track').get('name'),
+				'id': item.get('track').get('id'),
+				'duration_ms': item.get('track').get('duration_ms'),
+				'popularity': item.get('track').get('popularity'),
+				'uri': item.get('track').get('uri'),
+				'url': item.get('track').get('external_urls').get('spotify'),
+				'preview_url': item.get('track').get('preview_url'),
+				'artists': [],
+			}
+			# Store artist(s) metadata
+			for artists in item.get('track').get('artists'):
+				artist = {
+					'name': artists.get('name'),
+					'id': artists.get('id'),
+					'uri': artists.get('uri'),
+					'url': artists.get('external_urls').get('spotify')
+				}
+				# add artist to track json
+				track.get('artists').append(artist)
+			# Store album metadata
+			album = item.get('track').get('album')
+			albumCleaned = {
+				'name': album.get('name'),
+				'id': album.get('id'),
+				'uri': album.get('uri'),
+				'url': album.get('external_urls').get('spotify'),
+				'album_type': album.get('album_type'),
+				'total_tracks': album.get('total_tracks'),
+				# 640 x 640 cover image
+				'image': album.get('images')[0].get('url')
+			}
+			# add album to track json
+			track['album'] = albumCleaned
+			# add cover image 
+			track['cover_image'] = item.get('track').get('album').get('images')[0].get('url')
+			# add the track in response json
+			items.append(track)
+
+		response = {
+			'limit': jsonData.get('limit'),
+			'total_saved': jsonData.get('total'),
+			'total_items': count,
+			'items': items
+		}
+		return response
 
 # 
 # Template Rendering Views:
