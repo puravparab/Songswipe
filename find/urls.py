@@ -1,4 +1,4 @@
-"""songswipe URL Configuration
+"""find(songswipe) URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.2/topics/http/urls/
@@ -13,13 +13,11 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
+from .views import *
+
+app_name = 'find'
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('app.urls', namespace='main-app')),
-    path('app/', include('app.urls', namespace='main-app')),
-    path('find/', include('find.urls', namespace='find')),
-    path('spotify/', include('spotify.urls', namespace='spotify')),
+   path('', find.as_view(), name='find-song-pairs'),
 ]

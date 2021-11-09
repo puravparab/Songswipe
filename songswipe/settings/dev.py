@@ -51,6 +51,7 @@ INSTALLED_APPS = [
 
     # Created Apps
     'app.apps.AppConfig',
+    'find.apps.FindConfig',
     'spotify.apps.SpotifyConfig',
 
 ]
