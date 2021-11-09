@@ -5,12 +5,12 @@ from django.shortcuts import render, redirect
 from django.conf import settings
 from django.utils import timezone
 from datetime import timedelta
+from requests import Request, get, post, put
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from rest_framework.decorators import api_view, parser_classes
-from requests import Request, get, post, put
 from app.models import User
 from .utils import *
 
