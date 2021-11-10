@@ -147,7 +147,14 @@ class find(APIView):
 			'total_pairs': pair_count,
 			'pair_list': pair_list
 		}
-		return Response(songs, status=status.HTTP_200_OK)
+
+		response = Response(songs, status=status.HTTP_200_OK)
+		# Create cookies with token data:
+		cookie_max_age = 365*24*60*60
+		# Set Cookies
+		response.set_cookie('access_token', access_token, cookie_max_age, samesite='Lax')
+		response.set_cookie('expires_in', expires_in, cookie_max_age, samesite='Lax')
+		return response
 
 	# Validate tokens
 	def authCheck(self, tokens):
