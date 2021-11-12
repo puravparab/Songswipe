@@ -75,8 +75,10 @@ async function display(pairData){
 };
 
 // On page load request the run:
+// TODO: Remove choice buttons. ALlow users to select a song by clicking the cover image
 window.onLoad = getSongPairs()
 	.then(data => {
+
 		// Total no of pairs
 		var total_pairs = data["total_pairs"]
 
@@ -93,6 +95,9 @@ window.onLoad = getSongPairs()
 
 		// Display the a pair of songs
 		display(songPair)
+
+		// Results
+		var results = {}
 
 		// If song on tbe left is selected
 		optionOneBtn.addEventListener("click", () => {
@@ -117,8 +122,29 @@ window.onLoad = getSongPairs()
 				index = index + 1
 				songPair = data["pair_list"][index]
 				display(songPair)
-			}
-			
+			}		
 		})
+
+		// Plays audio clip for left osng on hover 
+		imageSongOne.addEventListener("mouseenter", ()=>{
+			var audio = new Audio(songPair[0]["preview_url"]);
+			// img.style.border = "2px solid green";
+			audio.play()
+			imageSongOne.addEventListener("mouseleave", ()=>{
+				audio.pause();
+				// img.style.border = "";
+			});
+		});
+
+		// Plays audio clip for right song on hover
+		imageSongTwo.addEventListener("mouseenter", ()=>{
+			var audio = new Audio(songPair[1]["preview_url"]);
+			// img.style.border = "2px solid green";
+			audio.play()
+			imageSongTwo.addEventListener("mouseleave", ()=>{
+				audio.pause();
+				// img.style.border = "";
+			});
+		});
 	})
 	.catch(err => console.log("Rejected", err))

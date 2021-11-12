@@ -7,6 +7,8 @@ from spotify.utils import checkSpotifyAuthentication
 import random
 
 # Api that gets pairs of songs and accepts results of swipes
+# TODO: Remove songs without a preview_url
+# TODO: return more than 25 pairs of songs
 class find(APIView):
 	def get(self, request, format=None):
 		access_token = request.COOKIES.get('access_token')

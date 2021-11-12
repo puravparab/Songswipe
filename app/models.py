@@ -1,5 +1,6 @@
 from django.db import models
 
+# TODO: Add entry for free/premium account
 class User(models.Model):
 	# session_id
 	# user = models.CharField(max_length=60, unique=True, null=True)
