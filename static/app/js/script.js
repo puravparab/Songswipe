@@ -102,7 +102,7 @@ window.onLoad = getSongPairs()
 		// If song on tbe left is selected
 		optionOneBtn.addEventListener("click", () => {
 			// If there are no more song pairs reload the site
-			if(index > 23){
+			if(index > total_pairs - 2){
 				location.reload();
 			}
 			else{
@@ -115,7 +115,7 @@ window.onLoad = getSongPairs()
 		// If song on the right is selected
 		optionTwoBtn.addEventListener("click", () => {
 			// If there are no more song pairs reload the site
-			if(index > 23){
+			if(index > total_pairs - 2){
 				location.reload();
 			}
 			else{
