@@ -7,7 +7,6 @@ from spotify.utils import checkSpotifyAuthentication
 import random
 
 # Api that gets pairs of songs and accepts results of swipes
-# TODO: return more than 25 pairs of songs
 # TODO: make sure one pair doesnt have the same songs
 class find(APIView):
 	def get(self, request, format=None):
@@ -75,8 +74,8 @@ class find(APIView):
 			Response(response.json(), status=status.HTTP_400_BAD_REQUEST)
 
 		# Return 50 songs at random from the library and choose 10. Continue until 
-		# total_song_count equals 50
-		while (total_song_count < 50):
+		# total_song_count equals 80
+		while (total_song_count < 80):
 			# TODO: ADD CASE IF USER HAS LESS THAN 50 SONGS
 			limit = 50
 			offset = random.randint(0, total_in_library-limit-1)
@@ -99,7 +98,7 @@ class find(APIView):
 				total_items = response.get('total_items')
 				count = 0
 				while (True):
-					if count < 10 and total_song_count < 50:
+					if count < 10 and total_song_count < 80:
 						index = random.randint(0, total_items - 1)
 						if(response.get('items')[index].get('preview_url') == None):
 							pass
@@ -128,7 +127,7 @@ class find(APIView):
 		while (True): 
 			songs_pairs = []
 			length = len(songList)
-			if(pair_count < 25):
+			if(pair_count < 40):
 				# If only one song is left in songList
 				if(length == 1):
 					songs_pairs.append(songListCopy.pop(0))
