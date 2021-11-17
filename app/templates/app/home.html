@@ -2,8 +2,15 @@
 
 {% load static %}
 
+{% block meta %}
+	<link rel="stylesheet" href="{% static 'app/css/home.css' %}">
+{% endblock %}
+
 {% block content %}
-	<h1>LOGGED IN</h1>
-	<div class="song-pair-container">
+	<div class="song-swipe">
+		<h1 class="title">Songswipe</h1>
+		<div class="song-pair-container">
+		</div>
 	</div>
+	
 {% endblock %}

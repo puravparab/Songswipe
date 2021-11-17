@@ -1,1 +1,80 @@
 /*Styles for home.html*/
+
+html{
+	background-color: rgb(211, 197, 240);
+}
+.main{
+	margin: auto;
+}
+
+.song-swipe{
+	display: flex;
+	flex-direction: column;
+	justify-content: start;
+	height: 100vh;
+	margin: auto;
+	font-family: sans-serif;
+}
+
+.song-swipe .title{
+	font-size: 35px;
+	margin: 5% 0 5% 0;
+	color: purple;
+}
+
+.song-swipe .song-pair-container{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 0 20%;
+	margin: 5% 0 5% 0;
+}
+
+.song-swipe .song-pair-container .song{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 30px 0;
+}
+
+.song-swipe .song-pair-container img{
+	border: 3px solid rgb(211, 197, 240);
+	border-radius: 50%;
+}
+
+.song-swipe .song-pair-container button{
+	width: 150px;
+	height: 40px;
+	border: 2px solid darkviolet;
+	border-radius: 20px;
+	cursor: pointer;
+}
+
+.song-swipe .song-pair-container button a{
+	font-size: 20px;
+}
+
+@media screen and (max-width: 650px){
+	.main{
+		display: none;
+	}
+}
+
+@media screen and (min-width: 650px){
+	.main{
+		width: 80%;
+	}
+}
+@media screen and (min-width: 1080px){
+	.main{
+		width: 70%;
+	}
+}
+
+@media screen and (min-width: 1240px){
+	.main{
+		width: 60%;
+	}
+}
+

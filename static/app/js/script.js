@@ -14,23 +14,26 @@ var songPairContainer = document.querySelector(".song-pair-container")
 
 // Create a loading element which displays before the songPairs are loaded in
 const loadingElement = document.createElement("h1")
+loadingElement.className = "loading-element"
 var loadingTextNode = document.createTextNode("Loading songs ...")
 loadingElement.appendChild(loadingTextNode)
 songPairContainer.appendChild(loadingElement)
 
 // Create div for each song in a pair
 var songOneContainer = document.createElement("div")
+songOneContainer.className = "song"
 var songTwoContainer = document.createElement("div")
+songTwoContainer.className = "song"
 
 // Create elements for song one
 var imageSongOne = document.createElement("img")
 imageSongOne.id = "ImageOne"
-imageSongOne.width = "200"
-imageSongOne.width = "200"
+imageSongOne.width = "250"
+imageSongOne.height = "250"
 var optionOneBtn = document.createElement("button")
 optionOneBtn.id = "optionOneBtn"
 var anchorOne = document.createElement("a")
-var anchorOneTexNode = document.createTextNode("Choice 1")
+var anchorOneTexNode = document.createTextNode("Song A")
 anchorOne.appendChild(anchorOneTexNode)
 optionOneBtn.appendChild(anchorOne)
 songOneContainer.appendChild(imageSongOne)
@@ -40,22 +43,21 @@ songPairContainer.appendChild(songOneContainer)
 // Create elements for song two
 var imageSongTwo = document.createElement("img")
 imageSongTwo.id = "ImageTwo"
-imageSongTwo.width = "200"
-imageSongTwo.width = "200"
+imageSongTwo.width = "250"
+imageSongTwo.height = "250"
 var optionTwoBtn = document.createElement("button")
 optionTwoBtn.id = "optionTwoBtn"
 var anchorTwo = document.createElement("a")
-var anchorTwoTexNode = document.createTextNode("Choice 2")
+var anchorTwoTexNode = document.createTextNode("Song B")
 anchorTwo.appendChild(anchorTwoTexNode)
 optionTwoBtn.appendChild(anchorTwo)
 songTwoContainer.appendChild(imageSongTwo)
 songTwoContainer.appendChild(optionTwoBtn)
 
 // Hide the options buttons
-optionOneBtn.style.display = "none"
-optionTwoBtn.style.display = "none"
+songOneContainer.style.display = "none"
+songTwoContainer.style.display = "none"
 
-songPairContainer.style.display = "flex"
 songPairContainer.appendChild(songTwoContainer)
 
 // Display given song pair
@@ -90,8 +92,8 @@ window.onLoad = getSongPairs()
 		loadingElement.style.display = "none"
 
 		// Display the option buttons
-		optionOneBtn.style.display = "block"
-		optionTwoBtn.style.display = "block"
+		songOneContainer.style.display = "flex"
+		songTwoContainer.style.display = "flex"
 
 		// Display the a pair of songs
 		display(songPair)
@@ -128,22 +130,22 @@ window.onLoad = getSongPairs()
 		// Plays audio clip for left osng on hover 
 		imageSongOne.addEventListener("mouseenter", ()=>{
 			var audio = new Audio(songPair[0]["preview_url"]);
-			// img.style.border = "2px solid green";
+			imageSongOne.style.border = "3px solid green";
 			audio.play()
 			imageSongOne.addEventListener("mouseleave", ()=>{
 				audio.pause();
-				// img.style.border = "";
+				imageSongOne.style.border = "";
 			});
 		});
 
 		// Plays audio clip for right song on hover
 		imageSongTwo.addEventListener("mouseenter", ()=>{
 			var audio = new Audio(songPair[1]["preview_url"]);
-			// img.style.border = "2px solid green";
+			imageSongTwo.style.border = "3px solid orange";
 			audio.play()
 			imageSongTwo.addEventListener("mouseleave", ()=>{
 				audio.pause();
-				// img.style.border = "";
+				imageSongTwo.style.border = "";
 			});
 		});
 	})
