@@ -25,53 +25,107 @@ songOneContainer.className = "song"
 var songTwoContainer = document.createElement("div")
 songTwoContainer.className = "song"
 
+// SONG ONE:
 // Create elements for song one
 var imageSongOne = document.createElement("img")
 imageSongOne.id = "ImageOne"
 imageSongOne.width = "250"
 imageSongOne.height = "250"
+// Create option to select left song
 var optionOneBtn = document.createElement("button")
 optionOneBtn.id = "optionOneBtn"
 var anchorOne = document.createElement("a")
 var anchorOneTexNode = document.createTextNode("Song A")
 anchorOne.appendChild(anchorOneTexNode)
 optionOneBtn.appendChild(anchorOne)
+// Create button to reveal details about left song
+var revealOneBtn = document.createElement("button")
+revealOneBtn.id = "revealOneBtn"
+var revealOneText = document.createTextNode("Reveal")
+revealOneBtn.appendChild(revealOneText)
+// Left song details
+var songOneDesc = document.createElement("div")
+var songOneNameTag = document.createElement("h1")
+var songOneArtistTag = document.createElement("h3")
+songOneDesc.appendChild(songOneNameTag)
+songOneDesc.appendChild(songOneArtistTag)
+// Append elements to the container
 songOneContainer.appendChild(imageSongOne)
 songOneContainer.appendChild(optionOneBtn)
+songOneContainer.appendChild(revealOneBtn)
+songOneContainer.appendChild(songOneDesc)
 songPairContainer.appendChild(songOneContainer)
 
+// SONG TWO
 // Create elements for song two
 var imageSongTwo = document.createElement("img")
 imageSongTwo.id = "ImageTwo"
 imageSongTwo.width = "250"
 imageSongTwo.height = "250"
+// Create option to select right song
 var optionTwoBtn = document.createElement("button")
 optionTwoBtn.id = "optionTwoBtn"
 var anchorTwo = document.createElement("a")
 var anchorTwoTexNode = document.createTextNode("Song B")
 anchorTwo.appendChild(anchorTwoTexNode)
 optionTwoBtn.appendChild(anchorTwo)
+// Create button to reveal details about right song
+var revealTwoBtn = document.createElement("button")
+revealTwoBtn.id = "revealTwoBtn"
+var revealTwoText = document.createTextNode("Reveal")
+revealTwoBtn.appendChild(revealTwoText)
+// Right osng details
+var songTwoDesc = document.createElement("div")
+var songTwoNameTag = document.createElement("h1")
+var songTwoArtistTag = document.createElement("h3")
+songTwoDesc.appendChild(songTwoNameTag)
+songTwoDesc.appendChild(songTwoArtistTag)
+// Append elements to the container
 songTwoContainer.appendChild(imageSongTwo)
 songTwoContainer.appendChild(optionTwoBtn)
-
-// Hide the options buttons
-songOneContainer.style.display = "none"
-songTwoContainer.style.display = "none"
-
+songTwoContainer.appendChild(revealTwoBtn)
+songTwoContainer.appendChild(songTwoDesc)
 songPairContainer.appendChild(songTwoContainer)
 
-// Display given song pair
+// Hide elements until songs load
+songOneDesc.style.display = "none"
+songOneContainer.style.display = "none"
+songTwoDesc.style.display = "none"
+songTwoContainer.style.display = "none"
+
+// Display given song pair to window
 async function display(pairData){
+	songOneDesc.style.display = "none"
+	songTwoDesc.style.display = "none"
+
 	// Parse through data
-	// Song one:
+
+	// SONG ONE:
 	songOneName= songPair[0]["name"]
 	songOneImage = songPair[0]["cover_image"]
-	songOnePreviewURL = songPair[0]["preview_url"]
-	// Song Two:
-	songTwoName= songPair[1]["name"]
+	songOnePreviewURL = songPair[0]["preview_url"
+	]
+	songOneNameTag.textContent = songOneName
+	// Parse through list of artists
+	var artistList = ""
+	for(let i = 0; i < songPair[0]["artists"].length; i++){
+		artistList += songPair[0]["artists"][i]["name"] + ", "
+	}
+	songOneArtistTag.textContent = artistList
+
+	// SONG TWO
+	songTwoName = songPair[1]["name"]
 	songTwoImage = songPair[1]["cover_image"]
 	songTwoPreviewURL = songPair[1]["preview_url"]
-
+	songTwoNameTag.textContent = songTwoName
+	// Parse through list of artists
+	var artistList = ""
+	for(let i = 0; i < songPair[1]["artists"].length; i++){
+		artistList += songPair[1]["artists"][i]["name"] + ", "
+	}
+	songTwoArtistTag.textContent = artistList
+	
+	// Update elements 
 	imageSongOne.src = songOneImage 
 	imageSongTwo.src = songTwoImage
 };
@@ -80,7 +134,6 @@ async function display(pairData){
 // TODO: Remove choice buttons. ALlow users to select a song by clicking the cover image
 window.onLoad = getSongPairs()
 	.then(data => {
-
 		// Total no of pairs
 		var total_pairs = data["total_pairs"]
 
@@ -113,7 +166,6 @@ window.onLoad = getSongPairs()
 				display(songPair)
 			}
 		});
-
 		// If song on the right is selected
 		optionTwoBtn.addEventListener("click", () => {
 			// If there are no more song pairs reload the site
@@ -137,7 +189,6 @@ window.onLoad = getSongPairs()
 				imageSongOne.style.border = "";
 			});
 		});
-
 		// Plays audio clip for right song on hover
 		imageSongTwo.addEventListener("mouseenter", ()=>{
 			var audio = new Audio(songPair[1]["preview_url"]);
@@ -148,5 +199,27 @@ window.onLoad = getSongPairs()
 				imageSongTwo.style.border = "";
 			});
 		});
+
+		// Reveal details of left song
+		revealOneBtn.addEventListener("click", () => {
+			if(songOneDesc.style.display === "none"){
+				songOneDesc.style.display = "block"
+			}
+			else{
+				songOneDesc.style.display = "none"
+			}
+			
+		});
+		// Reveal details of right song
+		revealTwoBtn.addEventListener("click", () => {
+			if(songTwoDesc.style.display === "none"){
+				console.log("Asdasd")
+				songTwoDesc.style.display = "block"
+
+			}
+			else{
+				songTwoDesc.style.display = "none"
+			}
+		})
 	})
 	.catch(err => console.log("Rejected", err))
