@@ -41,10 +41,11 @@ optionOneBtn.appendChild(anchorOne)
 // Create button to reveal details about left song
 var revealOneBtn = document.createElement("button")
 revealOneBtn.id = "revealOneBtn"
-var revealOneText = document.createTextNode("Reveal")
+var revealOneText = document.createTextNode("Details")
 revealOneBtn.appendChild(revealOneText)
 // Left song details
 var songOneDesc = document.createElement("div")
+songOneDesc.className = "song-description"
 var songOneNameTag = document.createElement("h1")
 var songOneArtistTag = document.createElement("h3")
 songOneDesc.appendChild(songOneNameTag)
@@ -72,10 +73,11 @@ optionTwoBtn.appendChild(anchorTwo)
 // Create button to reveal details about right song
 var revealTwoBtn = document.createElement("button")
 revealTwoBtn.id = "revealTwoBtn"
-var revealTwoText = document.createTextNode("Reveal")
+var revealTwoText = document.createTextNode("Details")
 revealTwoBtn.appendChild(revealTwoText)
 // Right osng details
 var songTwoDesc = document.createElement("div")
+songTwoDesc.className = "song-description"
 var songTwoNameTag = document.createElement("h1")
 var songTwoArtistTag = document.createElement("h3")
 songTwoDesc.appendChild(songTwoNameTag)
@@ -109,7 +111,12 @@ async function display(pairData){
 	// Parse through list of artists
 	var artistList = ""
 	for(let i = 0; i < songPair[0]["artists"].length; i++){
-		artistList += songPair[0]["artists"][i]["name"] + ", "
+		if(i === 0){
+			artistList += songPair[0]["artists"][i]["name"]
+		}
+		else{
+			artistList += ", " + songPair[0]["artists"][i]["name"]
+		}
 	}
 	songOneArtistTag.textContent = artistList
 
@@ -121,7 +128,12 @@ async function display(pairData){
 	// Parse through list of artists
 	var artistList = ""
 	for(let i = 0; i < songPair[1]["artists"].length; i++){
-		artistList += songPair[1]["artists"][i]["name"] + ", "
+		if(i === 0){
+			artistList += songPair[1]["artists"][i]["name"]
+		}
+		else{
+			artistList += ", " + songPair[1]["artists"][i]["name"]
+		}
 	}
 	songTwoArtistTag.textContent = artistList
 	
@@ -203,7 +215,7 @@ window.onLoad = getSongPairs()
 		// Reveal details of left song
 		revealOneBtn.addEventListener("click", () => {
 			if(songOneDesc.style.display === "none"){
-				songOneDesc.style.display = "block"
+				songOneDesc.style.display = "flex"
 			}
 			else{
 				songOneDesc.style.display = "none"
@@ -214,7 +226,7 @@ window.onLoad = getSongPairs()
 		revealTwoBtn.addEventListener("click", () => {
 			if(songTwoDesc.style.display === "none"){
 				console.log("Asdasd")
-				songTwoDesc.style.display = "block"
+				songTwoDesc.style.display = "flex"
 
 			}
 			else{
