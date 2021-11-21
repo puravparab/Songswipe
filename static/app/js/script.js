@@ -25,8 +25,10 @@ songOneContainer.className = "song"
 var songTwoContainer = document.createElement("div")
 songTwoContainer.className = "song"
 
-// SONG ONE:
-// Create elements for song one
+///////////////
+// SONG ONE: //
+///////////////
+// Create elements for song one 
 var imageSongOne = document.createElement("img")
 imageSongOne.id = "ImageOne"
 imageSongOne.width = "250"
@@ -38,6 +40,24 @@ var anchorOne = document.createElement("a")
 var anchorOneTexNode = document.createTextNode("Song A")
 anchorOne.appendChild(anchorOneTexNode)
 optionOneBtn.appendChild(anchorOne)
+// Create left song menu bar
+var songOneBar = document.createElement("div")
+songOneBar.className = "song-bar"
+var likeIconL = document.createElement("img")
+likeIconL.src = "/static/app/assets/images/svg/heart_black_outline.svg"
+likeIconL.width = "30"
+likeIconL.height = "30"
+var plusIconL = document.createElement("img")
+plusIconL.src = "/static/app/assets/images/svg/plus_black.svg"
+plusIconL.width = "30"
+plusIconL.height = "30"
+var detailsBtnL = document.createElement("img")
+detailsBtnL.src = "/static/app/assets/images/svg/chevron_down_black.svg"
+detailsBtnL.width = "30"
+detailsBtnL.height = "30"
+songOneBar.appendChild(likeIconL)
+songOneBar.appendChild(plusIconL)
+songOneBar.appendChild(detailsBtnL)
 // Create button to reveal details about left song
 var revealOneBtn = document.createElement("button")
 revealOneBtn.id = "revealOneBtn"
@@ -50,14 +70,18 @@ var songOneNameTag = document.createElement("h1")
 var songOneArtistTag = document.createElement("h3")
 songOneDesc.appendChild(songOneNameTag)
 songOneDesc.appendChild(songOneArtistTag)
-// Append elements to the container
+
+// Append elements of the left song to the container
 songOneContainer.appendChild(imageSongOne)
 songOneContainer.appendChild(optionOneBtn)
+songOneContainer.appendChild(songOneBar)
 songOneContainer.appendChild(revealOneBtn)
 songOneContainer.appendChild(songOneDesc)
 songPairContainer.appendChild(songOneContainer)
 
-// SONG TWO
+///////////////
+// SONG TWO: //
+///////////////
 // Create elements for song two
 var imageSongTwo = document.createElement("img")
 imageSongTwo.id = "ImageTwo"
@@ -70,21 +94,41 @@ var anchorTwo = document.createElement("a")
 var anchorTwoTexNode = document.createTextNode("Song B")
 anchorTwo.appendChild(anchorTwoTexNode)
 optionTwoBtn.appendChild(anchorTwo)
+// Create the right song menu bar
+var songTwoBar = document.createElement("div")
+songTwoBar.className = "song-bar"
+var likeIconR = document.createElement("img")
+likeIconR.src = "/static/app/assets/images/svg/heart_black_outline.svg"
+likeIconR.width = "30"
+likeIconR.height = "30"
+var plusIconR = document.createElement("img")
+plusIconR.src = "/static/app/assets/images/svg/plus_black.svg"
+plusIconR.width = "30"
+plusIconR.height = "30"
+var detailsBtnR = document.createElement("img")
+detailsBtnR.src = "/static/app/assets/images/svg/chevron_down_black.svg"
+detailsBtnR.width = "30"
+detailsBtnR.height = "30"
+songTwoBar.appendChild(likeIconR)
+songTwoBar.appendChild(plusIconR)
+songTwoBar.appendChild(detailsBtnR)
 // Create button to reveal details about right song
 var revealTwoBtn = document.createElement("button")
 revealTwoBtn.id = "revealTwoBtn"
 var revealTwoText = document.createTextNode("Details")
 revealTwoBtn.appendChild(revealTwoText)
-// Right osng details
+// Right song details
 var songTwoDesc = document.createElement("div")
 songTwoDesc.className = "song-description"
 var songTwoNameTag = document.createElement("h1")
 var songTwoArtistTag = document.createElement("h3")
 songTwoDesc.appendChild(songTwoNameTag)
 songTwoDesc.appendChild(songTwoArtistTag)
-// Append elements to the container
+
+// Append elements of the right song to the container
 songTwoContainer.appendChild(imageSongTwo)
 songTwoContainer.appendChild(optionTwoBtn)
+songTwoContainer.appendChild(songTwoBar)
 songTwoContainer.appendChild(revealTwoBtn)
 songTwoContainer.appendChild(songTwoDesc)
 songPairContainer.appendChild(songTwoContainer)
