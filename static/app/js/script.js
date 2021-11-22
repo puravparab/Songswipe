@@ -53,17 +53,12 @@ plusIconL.src = "/static/app/assets/images/svg/plus_black.svg"
 plusIconL.width = "30"
 plusIconL.height = "30"
 var detailsBtnL = document.createElement("img")
-detailsBtnL.src = "/static/app/assets/images/svg/chevron_down_black.svg"
+detailsBtnL.src = "/static/app/assets/images/svg/chevron_black_down.svg"
 detailsBtnL.width = "30"
 detailsBtnL.height = "30"
 songOneBar.appendChild(saveL)
 songOneBar.appendChild(plusIconL)
 songOneBar.appendChild(detailsBtnL)
-// Create button to reveal details about left song
-var revealOneBtn = document.createElement("button")
-revealOneBtn.id = "revealOneBtn"
-var revealOneText = document.createTextNode("Details")
-revealOneBtn.appendChild(revealOneText)
 // Left song details
 var songOneDesc = document.createElement("div")
 songOneDesc.className = "song-description"
@@ -76,7 +71,6 @@ songOneDesc.appendChild(songOneArtistTag)
 songOneContainer.appendChild(imageSongOne)
 songOneContainer.appendChild(optionOneBtn)
 songOneContainer.appendChild(songOneBar)
-songOneContainer.appendChild(revealOneBtn)
 songOneContainer.appendChild(songOneDesc)
 songPairContainer.appendChild(songOneContainer)
 
@@ -108,17 +102,12 @@ plusIconR.src = "/static/app/assets/images/svg/plus_black.svg"
 plusIconR.width = "30"
 plusIconR.height = "30"
 var detailsBtnR = document.createElement("img")
-detailsBtnR.src = "/static/app/assets/images/svg/chevron_down_black.svg"
+detailsBtnR.src = "/static/app/assets/images/svg/chevron_black_down.svg"
 detailsBtnR.width = "30"
 detailsBtnR.height = "30"
 songTwoBar.appendChild(saveR)
 songTwoBar.appendChild(plusIconR)
 songTwoBar.appendChild(detailsBtnR)
-// Create button to reveal details about right song
-var revealTwoBtn = document.createElement("button")
-revealTwoBtn.id = "revealTwoBtn"
-var revealTwoText = document.createTextNode("Details")
-revealTwoBtn.appendChild(revealTwoText)
 // Right song details
 var songTwoDesc = document.createElement("div")
 songTwoDesc.className = "song-description"
@@ -131,7 +120,6 @@ songTwoDesc.appendChild(songTwoArtistTag)
 songTwoContainer.appendChild(imageSongTwo)
 songTwoContainer.appendChild(optionTwoBtn)
 songTwoContainer.appendChild(songTwoBar)
-songTwoContainer.appendChild(revealTwoBtn)
 songTwoContainer.appendChild(songTwoDesc)
 songPairContainer.appendChild(songTwoContainer)
 
@@ -143,6 +131,9 @@ songTwoContainer.style.display = "none"
 
 // Display given song pair to window
 async function display(pairData){
+	// Reset details button
+	detailsBtnL.src = "/static/app/assets/images/svg/chevron_black_down.svg"
+	detailsBtnR.src = "/static/app/assets/images/svg/chevron_black_down.svg"
 	// Hide song details
 	songOneDesc.style.display = "none"
 	songTwoDesc.style.display = "none"
@@ -263,23 +254,26 @@ window.onLoad = getSongPairs()
 		});
 
 		// Reveal details of left song
-		revealOneBtn.addEventListener("click", () => {
+		detailsBtnL.addEventListener("click", () => {
 			if(songOneDesc.style.display === "none"){
+				detailsBtnL.src = "/static/app/assets/images/svg/chevron_black_up.svg"
 				songOneDesc.style.display = "flex"
 			}
 			else{
 				songOneDesc.style.display = "none"
+				detailsBtnL.src = "/static/app/assets/images/svg/chevron_black_down.svg"
 			}
 			
 		});
 		// Reveal details of right song
-		revealTwoBtn.addEventListener("click", () => {
+		detailsBtnR.addEventListener("click", () => {
 			if(songTwoDesc.style.display === "none"){
+				detailsBtnR.src = "/static/app/assets/images/svg/chevron_black_up.svg"
 				songTwoDesc.style.display = "flex"
-
 			}
 			else{
 				songTwoDesc.style.display = "none"
+				detailsBtnR.src = "/static/app/assets/images/svg/chevron_black_down.svg"
 			}
 		})
 
