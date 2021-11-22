@@ -57,6 +57,17 @@ html{
 	font-size: 20px;
 }
 
+.song-swipe .song-pair-container .song .song-bar{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	gap: 10%;
+}
+.song-swipe .song-pair-container .song .song-bar img{
+	cursor: pointer;
+}
+
 .song-swipe .song-pair-container .song .song-description{
 	display: flex;
 	flex-direction: column;

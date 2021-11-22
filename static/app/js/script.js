@@ -43,10 +43,11 @@ optionOneBtn.appendChild(anchorOne)
 // Create left song menu bar
 var songOneBar = document.createElement("div")
 songOneBar.className = "song-bar"
-var likeIconL = document.createElement("img")
-likeIconL.src = "/static/app/assets/images/svg/heart_black_outline.svg"
-likeIconL.width = "30"
-likeIconL.height = "30"
+var saveL = document.createElement("img")
+saveL.src = "/static/app/assets/images/svg/heart_black_outline.svg"
+var saveLClicked = false
+saveL.width = "30"
+saveL.height = "30"
 var plusIconL = document.createElement("img")
 plusIconL.src = "/static/app/assets/images/svg/plus_black.svg"
 plusIconL.width = "30"
@@ -55,7 +56,7 @@ var detailsBtnL = document.createElement("img")
 detailsBtnL.src = "/static/app/assets/images/svg/chevron_down_black.svg"
 detailsBtnL.width = "30"
 detailsBtnL.height = "30"
-songOneBar.appendChild(likeIconL)
+songOneBar.appendChild(saveL)
 songOneBar.appendChild(plusIconL)
 songOneBar.appendChild(detailsBtnL)
 // Create button to reveal details about left song
@@ -97,10 +98,11 @@ optionTwoBtn.appendChild(anchorTwo)
 // Create the right song menu bar
 var songTwoBar = document.createElement("div")
 songTwoBar.className = "song-bar"
-var likeIconR = document.createElement("img")
-likeIconR.src = "/static/app/assets/images/svg/heart_black_outline.svg"
-likeIconR.width = "30"
-likeIconR.height = "30"
+var saveR = document.createElement("img")
+saveR.src = "/static/app/assets/images/svg/heart_black_outline.svg"
+saveR.width = "30"
+saveR.height = "30"
+var saveRClicked = false
 var plusIconR = document.createElement("img")
 plusIconR.src = "/static/app/assets/images/svg/plus_black.svg"
 plusIconR.width = "30"
@@ -109,7 +111,7 @@ var detailsBtnR = document.createElement("img")
 detailsBtnR.src = "/static/app/assets/images/svg/chevron_down_black.svg"
 detailsBtnR.width = "30"
 detailsBtnR.height = "30"
-songTwoBar.appendChild(likeIconR)
+songTwoBar.appendChild(saveR)
 songTwoBar.appendChild(plusIconR)
 songTwoBar.appendChild(detailsBtnR)
 // Create button to reveal details about right song
@@ -141,8 +143,12 @@ songTwoContainer.style.display = "none"
 
 // Display given song pair to window
 async function display(pairData){
+	// Hide song details
 	songOneDesc.style.display = "none"
 	songTwoDesc.style.display = "none"
+	// TODO: check if a song is liked an update the save icon accordingly
+	saveL.src = "/static/app/assets/images/svg/heart_black_outline.svg"
+	saveR.src = "/static/app/assets/images/svg/heart_black_outline.svg"
 
 	// Parse through data
 
@@ -269,7 +275,6 @@ window.onLoad = getSongPairs()
 		// Reveal details of right song
 		revealTwoBtn.addEventListener("click", () => {
 			if(songTwoDesc.style.display === "none"){
-				console.log("Asdasd")
 				songTwoDesc.style.display = "flex"
 
 			}
@@ -277,5 +282,28 @@ window.onLoad = getSongPairs()
 				songTwoDesc.style.display = "none"
 			}
 		})
+
+		// Save left song when icon is clicked
+		saveL.addEventListener("click", () => {
+			if(saveLClicked === false){
+				saveL.src = "/static/app/assets/images/svg/heart_red.svg"
+				saveLClicked = true
+			}
+			else{
+				saveL.src = "/static/app/assets/images/svg/heart_black_outline.svg"
+				saveLClicked = false
+			}
+		});
+		// Save right song when icon is clicked
+		saveR.addEventListener("click", () => {
+			if(saveRClicked === false){
+				saveR.src = "/static/app/assets/images/svg/heart_red.svg"
+				saveRClicked = true
+			}
+			else{
+				saveR.src = "/static/app/assets/images/svg/heart_black_outline.svg"
+				saveRClicked = false
+			}
+		});
 	})
 	.catch(err => console.log("Rejected", err))
