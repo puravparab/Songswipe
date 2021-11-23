@@ -147,7 +147,6 @@ class executeSpotifyAPIRequest(APIView):
 @parser_classes([JSONParser])
 def currentUserProfile(request, format=None):
 	if request.method == 'GET':
-
 		access_token = request.data.get('access_token')
 		refresh_token = request.data.get('refresh_token')
 		expires_in = request.data.get('expires_in')
@@ -158,7 +157,6 @@ def currentUserProfile(request, format=None):
 			'refresh_token': refresh_token,
 			'expires_in': expires_in
 		}
-
 		# Check if Spotify is authenticated
 		newTokens = checkSpotifyAuthentication(tokens)
 		if(newTokens == None):
@@ -321,24 +319,55 @@ class verifyTracksSaved(APIView):
 			refresh_token = request.data.get('refresh_token')
 			expires_in = newTokens.get('expires_in')
 
-		# Send get request to execute api
+		# Parse through the list of song ids and check if they exist in the user's library
+		# Spotify API accepts only 50 ids at a time
+		id_list = request.data.get('ids').split(',')
+		id_list_length = len(id_list)
+		id_count = 0
+		index = 0
+		index_add = 0
+		new_id_list = ""
+		items = []
+		headers = {'Content-type': 'application/json'}
+		ROOT_URL = request.build_absolute_uri('/')
 		tokens = {
 			'access_token': access_token,
-			'endpoint': 'me/tracks/contains',
-			'ids': request.data.get('ids')
+			'endpoint': 'me/tracks/contains'
 		}
-		headers = {'Content-type': 'application/json'}
-		try:
-			ROOT_URL = request.build_absolute_uri('/')
-			spotifyResponse = get((f'{ROOT_URL}spotify/api/execute/'),
-				json=tokens, headers=headers)
-		except:
-			return Response({'Error: Call to executeSpotifyAPIRequest Failed'}, status=status.HTTP_400_BAD_REQUEST)
-
-		if(spotifyResponse.ok):
-			return Response(spotifyResponse.json(), status=status.HTTP_200_OK)
-		else:
-			return Response(spotifyResponse.json(), status=status.HTTP_400_BAD_REQUEST)
+		while(True):
+			# if loop has reached end of id_list
+			if((index + index_add) >= id_list_length):
+				new_id_list = new_id_list[:-1]
+				# Send get request to execute api
+				tokens["ids"] = new_id_list
+				try:
+					spotifyResponse = get((f'{ROOT_URL}spotify/api/execute/'), json=tokens, headers=headers)
+				except:
+					return Response({'Error: Call to executeSpotifyAPIRequest Failed'}, status=status.HTTP_400_BAD_REQUEST)
+				if(spotifyResponse.ok):
+					items += spotifyResponse.json()
+				break
+			elif(index <= 49):
+				new_id_list += (f'{id_list[index + index_add]},')
+				index += 1
+			# if index is larger than 50
+			else:
+				new_id_list = new_id_list[:-1]
+				# Send get request to execute api
+				tokens["ids"] = new_id_list
+				try:
+					spotifyResponse = get((f'{ROOT_URL}spotify/api/execute/'), json=tokens, headers=headers)
+				except:
+					return Response({'Error: Call to executeSpotifyAPIRequest Failed'}, status=status.HTTP_400_BAD_REQUEST)
+				if(spotifyResponse.ok):
+					items += spotifyResponse.json()
+				new_id_list = ""
+				index = 0
+				index_add = 50
+		response = {
+			"items": items
+		}
+		return Response(response, status=status.HTTP_200_OK)
 
 	# Validate tokens
 	def authCheck(self, tokens):
@@ -354,6 +383,7 @@ class verifyTracksSaved(APIView):
 		# Check if Spotify is authenticated
 		newTokens = checkSpotifyAuthentication(tokens)
 		return newTokens
+
 # 
 # Template Rendering Views:
 # 

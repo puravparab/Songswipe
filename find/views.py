@@ -119,6 +119,35 @@ class find(APIView):
 			else:
 				Response(response.json(), status=status.HTTP_400_BAD_REQUEST)
 
+		# Check if the each song is present in the user's library
+		id_list = ""
+		for song in songList:
+			song_id = song.get("id")
+			id_list += (f'{song_id},')
+		tokens = {
+			'access_token': access_token,
+			'refresh_token': refresh_token,
+			'expires_in': expires_in,
+			'ids': id_list
+		}
+		try:
+			ROOT_URL = request.build_absolute_uri('/')
+			headers = {'Content-type': 'application/json'}
+			response = get((f'{ROOT_URL}spotify/api/user/saved-tracks/check/'),
+				json=tokens, headers=headers)
+		except:
+			return Response(response.json(), status=status.HTTP_400_BAD_REQUEST)
+		if(response.ok):
+			response = response.json()
+			index = 0
+			song_save_check = response.get("items")
+			for song in songList:
+				if(song_save_check[index] == True):
+					song["in_library"] = True
+				else:
+					song["in_library"] = False
+				index += 1
+
 		# Use songList to make a list of randomly paired songs
 		# stored in pair_list
 		songListCopy = songList
