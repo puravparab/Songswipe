@@ -115,7 +115,6 @@ def callback(request, format=None):
 # Execute an API request to the SPOTIFY API:
 class executeSpotifyAPIRequest(APIView):
 	parser_classes = [JSONParser]
-
 	def get(self, request, format=None):
 		access_token = request.data.get('access_token')
 		endpoint = request.data.get('endpoint')
@@ -127,7 +126,8 @@ class executeSpotifyAPIRequest(APIView):
 		# Creating url parameters
 		params = {
 			'limit': request.data.get('limit'),
-			'offset': request.data.get('offset')
+			'offset': request.data.get('offset'),
+			'ids': request.data.get('ids')
 		}
 		# request the Spotify API at the endpoint
 		response = get(BASE_URL + endpoint, headers=headers, params=params)
@@ -306,6 +306,54 @@ class userSavedTracks(APIView):
 		}
 		return response
 
+# Check if track(s) is saved in user's library
+# https://developer.spotify.com/documentation/web-api/reference/#/operations/check-users-saved-tracks
+class verifyTracksSaved(APIView):
+	parser_classes = [JSONParser]
+	def get(self, request, format=None):
+		newTokens = self.authCheck(request.data)
+		if(newTokens == None):
+			access_token = request.data.get('access_token')
+			refresh_token = request.data.get('refresh_token')
+			expires_in = request.data.get('expires_in')
+		else:
+			access_token = newTokens.get('access_token')
+			refresh_token = request.data.get('refresh_token')
+			expires_in = newTokens.get('expires_in')
+
+		# Send get request to execute api
+		tokens = {
+			'access_token': access_token,
+			'endpoint': 'me/tracks/contains',
+			'ids': request.data.get('ids')
+		}
+		headers = {'Content-type': 'application/json'}
+		try:
+			ROOT_URL = request.build_absolute_uri('/')
+			spotifyResponse = get((f'{ROOT_URL}spotify/api/execute/'),
+				json=tokens, headers=headers)
+		except:
+			return Response({'Error: Call to executeSpotifyAPIRequest Failed'}, status=status.HTTP_400_BAD_REQUEST)
+
+		if(spotifyResponse.ok):
+			return Response(spotifyResponse.json(), status=status.HTTP_200_OK)
+		else:
+			return Response(spotifyResponse.json(), status=status.HTTP_400_BAD_REQUEST)
+
+	# Validate tokens
+	def authCheck(self, tokens):
+		access_token = tokens.get('access_token')
+		refresh_token = tokens.get('refresh_token')
+		expires_in = tokens.get('expires_in')
+		# Create tokens to pass into checkSpotifyAuthenticated function
+		tokens = {
+			'access_token': access_token,
+			'refresh_token': refresh_token,
+			'expires_in': expires_in
+		}
+		# Check if Spotify is authenticated
+		newTokens = checkSpotifyAuthentication(tokens)
+		return newTokens
 # 
 # Template Rendering Views:
 # 
