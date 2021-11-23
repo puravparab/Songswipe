@@ -137,9 +137,21 @@ async function display(pairData){
 	// Hide song details
 	songOneDesc.style.display = "none"
 	songTwoDesc.style.display = "none"
-	// TODO: check if a song is liked an update the save icon accordingly
-	saveL.src = "/static/app/assets/images/svg/heart_black_outline.svg"
-	saveR.src = "/static/app/assets/images/svg/heart_black_outline.svg"
+	// Check if a song is in the user's library and update the save icon accordingly
+	if(songPair[0]["in_library"] == true){
+		saveL.src = "/static/app/assets/images/svg/heart_red.svg"
+		saveLClicked = true
+	}else{
+		saveL.src = "/static/app/assets/images/svg/heart_black_outline.svg"
+		saveLClicked = false
+	}
+	if(songPair[1]["in_library"] == true){
+		saveR.src = "/static/app/assets/images/svg/heart_red.svg"
+		saveRClicked = true
+	}else{
+		saveR.src = "/static/app/assets/images/svg/heart_black_outline.svg"
+		saveRClicked = false
+	}
 
 	// Parse through data
 
