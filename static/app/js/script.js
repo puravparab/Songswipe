@@ -52,12 +52,17 @@ var plusIconL = document.createElement("img")
 plusIconL.src = "/static/app/assets/images/svg/plus_black.svg"
 plusIconL.width = "30"
 plusIconL.height = "30"
+var spotIconL = document.createElement("img")
+spotIconL.src = "/static/app/assets/images/svg/spotify_green.svg"
+spotIconL.width = "30"
+spotIconL.height = "30"
 var detailsBtnL = document.createElement("img")
 detailsBtnL.src = "/static/app/assets/images/svg/chevron_black_down.svg"
 detailsBtnL.width = "30"
 detailsBtnL.height = "30"
 songOneBar.appendChild(saveL)
 songOneBar.appendChild(plusIconL)
+songOneBar.appendChild(spotIconL)
 songOneBar.appendChild(detailsBtnL)
 // Left song details
 var songOneDesc = document.createElement("div")
@@ -109,12 +114,17 @@ var plusIconR = document.createElement("img")
 plusIconR.src = "/static/app/assets/images/svg/plus_black.svg"
 plusIconR.width = "30"
 plusIconR.height = "30"
+var spotIconR = document.createElement("img")
+spotIconR.src = "/static/app/assets/images/svg/spotify_green.svg"
+spotIconR.width = "30"
+spotIconR.height = "30"
 var detailsBtnR = document.createElement("img")
 detailsBtnR.src = "/static/app/assets/images/svg/chevron_black_down.svg"
 detailsBtnR.width = "30"
 detailsBtnR.height = "30"
 songTwoBar.appendChild(saveR)
 songTwoBar.appendChild(plusIconR)
+songTwoBar.appendChild(spotIconR)
 songTwoBar.appendChild(detailsBtnR)
 // Right song details
 var songTwoDesc = document.createElement("div")
@@ -271,6 +281,38 @@ window.onLoad = getSongPairs()
 			});
 		});
 
+		// Save left song when icon is clicked
+		saveL.addEventListener("click", () => {
+			if(saveLClicked === false){
+				saveL.src = "/static/app/assets/images/svg/heart_red.svg"
+				saveLClicked = true
+			}
+			else{
+				saveL.src = "/static/app/assets/images/svg/heart_black_outline.svg"
+				saveLClicked = false
+			}
+		});
+		// Save right song when icon is clicked
+		saveR.addEventListener("click", () => {
+			if(saveRClicked === false){
+				saveR.src = "/static/app/assets/images/svg/heart_red.svg"
+				saveRClicked = true
+			}
+			else{
+				saveR.src = "/static/app/assets/images/svg/heart_black_outline.svg"
+				saveRClicked = false
+			}
+		});
+
+		// Open left song in spotify
+		spotIconL.addEventListener("click", () => {
+			window.open(songPair[0]["uri"])
+		});
+		// Open right song in spotify
+		spotIconR.addEventListener("click", () => {
+			window.open(songPair[1]["uri"])
+		})
+
 		// Reveal details of left song
 		detailsBtnL.addEventListener("click", () => {
 			if(songOneDesc.style.display === "none"){
@@ -294,28 +336,5 @@ window.onLoad = getSongPairs()
 				detailsBtnR.src = "/static/app/assets/images/svg/chevron_black_down.svg"
 			}
 		})
-
-		// Save left song when icon is clicked
-		saveL.addEventListener("click", () => {
-			if(saveLClicked === false){
-				saveL.src = "/static/app/assets/images/svg/heart_red.svg"
-				saveLClicked = true
-			}
-			else{
-				saveL.src = "/static/app/assets/images/svg/heart_black_outline.svg"
-				saveLClicked = false
-			}
-		});
-		// Save right song when icon is clicked
-		saveR.addEventListener("click", () => {
-			if(saveRClicked === false){
-				saveR.src = "/static/app/assets/images/svg/heart_red.svg"
-				saveRClicked = true
-			}
-			else{
-				saveR.src = "/static/app/assets/images/svg/heart_black_outline.svg"
-				saveRClicked = false
-			}
-		});
 	})
 	.catch(err => console.log("Rejected", err))
