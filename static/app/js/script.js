@@ -11,13 +11,13 @@ var getSongPairs = async () => {
 };
 
 var songPairContainer = document.querySelector(".song-pair-container")
-
+var loadingContainer = document.querySelector(".loading-container")
 // Create a loading element which displays before the songPairs are loaded in
 const loadingElement = document.createElement("h1")
 loadingElement.className = "loading-element"
 var loadingTextNode = document.createTextNode("Loading songs ...")
 loadingElement.appendChild(loadingTextNode)
-songPairContainer.appendChild(loadingElement)
+loadingContainer.appendChild(loadingElement)
 
 // Create div for each song in a pair
 var songOneContainer = document.createElement("div")
@@ -74,6 +74,14 @@ songOneContainer.appendChild(songOneBar)
 songOneContainer.appendChild(songOneDesc)
 songPairContainer.appendChild(songOneContainer)
 
+var orDiv = document.createElement("div")
+orDiv.className = "divider-or"
+var orheader = document.createElement("h1")
+var orText = document.createTextNode("or")
+orheader.appendChild(orText)
+orDiv.appendChild(orheader)
+songPairContainer.appendChild(orDiv)
+
 ///////////////
 // SONG TWO: //
 ///////////////
@@ -125,9 +133,8 @@ songPairContainer.appendChild(songTwoContainer)
 
 // Hide elements until songs load
 songOneDesc.style.display = "none"
-songOneContainer.style.display = "none"
 songTwoDesc.style.display = "none"
-songTwoContainer.style.display = "none"
+songPairContainer.style.display = "none"
 
 // Display given song pair to window
 async function display(pairData){
@@ -207,14 +214,13 @@ window.onLoad = getSongPairs()
 		songPair = data["pair_list"][index]
 
 		// Hide loading element
-		loadingElement.style.display = "none"
-
-		// Display the option buttons
-		songOneContainer.style.display = "flex"
-		songTwoContainer.style.display = "flex"
+		loadingContainer.style.display = "none"
 
 		// Display the a pair of songs
 		display(songPair)
+
+		// Display the songs
+		songPairContainer.style.display = "flex"
 
 		// Results
 		var results = {}

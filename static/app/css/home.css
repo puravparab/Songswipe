@@ -22,12 +22,27 @@ html{
 	color: purple;
 }
 
+.song-swipe .loading-element{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 40vh;
+}
+
 .song-swipe .song-pair-container{
 	display: flex;
 	justify-content: center;
 	align-items: flex-start;
-	gap: 0 20%;
+	gap: 0 8%;
 	margin: 5% 0 5% 0;
+}
+
+.song-swipe .song-pair-container .divider-or{
+	margin: 13% 0 auto 0;
+}
+.song-swipe .song-pair-container .divider-or h1{
+	margin: 0;
+	color: purple;
 }
 
 .song-swipe .song-pair-container .song{
@@ -80,6 +95,7 @@ html{
 .song-swipe .song-pair-container .song .song-description h1{
 	margin: 0;
 	font-size: 21px;
+	font-weight: bold;
 }
 .song-swipe .song-pair-container .song .song-description h3{
 	margin: 0;
@@ -94,7 +110,7 @@ html{
 
 @media screen and (min-width: 650px){
 	.main{
-		width: 80%;
+		width: 85%;
 	}
 }
 @media screen and (min-width: 1080px){
