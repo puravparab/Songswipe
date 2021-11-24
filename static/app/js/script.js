@@ -36,6 +36,21 @@ userProfileHeader.appendChild(displayName)
 userProfileHeader.appendChild(logOutBtn)
 homeHeader.appendChild(userProfileHeader)
 
+// Delete cookies when user presses log out
+logOutBtn.addEventListener("click", () => {
+	for (const cookie of cookies) {
+		const eqPos = cookie.indexOf("=");
+		const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+		if(name === "csrf_token"){
+			continue
+		}
+		else{
+			document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+		}
+  	}
+  	window.location.href = ROOT_URL
+});
+
 // Create a loading element which displays before the songPairs are loaded in
 const loadingElement = document.createElement("h1")
 loadingElement.className = "loading-element"
@@ -359,6 +374,6 @@ window.onLoad = getSongPairs()
 				songTwoDesc.style.display = "none"
 				detailsBtnR.src = "/static/app/assets/images/svg/chevron_black_down.svg"
 			}
-		})
+		});
 	})
 	.catch(err => console.log("Rejected", err))

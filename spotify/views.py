@@ -17,7 +17,7 @@ from .utils import *
 # Request Authorization to access data
 class AuthSpotify(APIView):
 	def get(self, request, format=None):
-		scopes = 'user-read-email user-library-read' 
+		scopes = 'user-read-email user-read-private user-library-read' 
 		url = Request('GET', 'https://accounts.spotify.com/authorize',
 			params={
 				'client_id': settings.SPOTIFY_CLIENT_ID,
@@ -119,7 +119,6 @@ class executeSpotifyAPIRequest(APIView):
 	def get(self, request, format=None):
 		access_token = request.data.get('access_token')
 		endpoint = request.data.get('endpoint')
-
 		BASE_URL = "https://api.spotify.com/v1/"
 		# Creating headers
 		headers = {'Content-type': 'application/json',
@@ -135,7 +134,7 @@ class executeSpotifyAPIRequest(APIView):
 		if(response.ok == True):
 			return Response(response.json(), status=status.HTTP_200_OK)
 		else:
-			return Response(response.json(), status=status.HTTP_400_BAD_REQUEST)
+			return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
 # 
 # Views that request specific information from executeSpotifyAPIRequest:
@@ -183,6 +182,11 @@ def currentUserProfile(request, format=None):
 		if(spotifyResponse.ok):
 			# Clean JSON Response
 			spotifyResponse = spotifyResponse.json()
+			# If image does not exist
+			try:
+				image = spotifyResponse.get('images')[0].get('url')
+			except:
+				image = ""
 			response = {
 				'access_token': access_token,
 				'expires_in': expires_in,
@@ -191,7 +195,7 @@ def currentUserProfile(request, format=None):
 				'followers': spotifyResponse.get('followers').get('total'),
 				'spotify_href': spotifyResponse.get('href'),
 				'spotify_id': spotifyResponse.get('id'),
-				'image': spotifyResponse.get('images')[0].get('url'),
+				'image': image,
 				'spotify_uri': spotifyResponse.get('uri')
 			}
 			return Response(response, status=status.HTTP_200_OK)
