@@ -1,4 +1,5 @@
 const ROOT_URL = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port
+const cookies = document.cookie.split("; ")
 
 // Request lsit of song pairs from the find api endpoint
 var getSongPairs = async () => {
@@ -10,8 +11,31 @@ var getSongPairs = async () => {
 	return data
 };
 
+// Select existing elements from home.html
+var homeHeader = document.querySelector(".home-header")
 var songPairContainer = document.querySelector(".song-pair-container")
 var loadingContainer = document.querySelector(".loading-container")
+
+// Find the values of display name and cover image
+var display_name = cookies.find(row => row.startsWith('display_name=')).split("=")[1]
+var user_cover_image = cookies.find(row => row.startsWith('user_cover_image=')).split("=")[1].slice(1,-1)
+
+// Create elements for the right side of the top header
+var userProfileHeader = document.createElement("div")
+userProfileHeader.className = "user-profile"
+var profileImage = document.createElement("img")
+profileImage.src = user_cover_image
+var displayName = document.createElement("h1")
+var displayNameText = document.createTextNode(display_name)
+displayName.appendChild(displayNameText)
+var logOutBtn = document.createElement("button")
+var logOutText = document.createTextNode("Log out")
+logOutBtn.appendChild(logOutText)
+userProfileHeader.appendChild(profileImage)
+userProfileHeader.appendChild(displayName)
+userProfileHeader.appendChild(logOutBtn)
+homeHeader.appendChild(userProfileHeader)
+
 // Create a loading element which displays before the songPairs are loaded in
 const loadingElement = document.createElement("h1")
 loadingElement.className = "loading-element"

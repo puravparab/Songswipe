@@ -3,11 +3,13 @@ from .models import User
 from spotify.utils import checkSpotifyAuthentication
 
 # Template Rendering Views:
+# TODO: Update user details on log in
 def welcome(request):
 	access_token = request.COOKIES.get('access_token')
 	refresh_token = request.COOKIES.get('refresh_token')
 	expires_in = request.COOKIES.get('expires_in')
 	spotify_id = request.COOKIES.get('spotify_id')
+	display_name = request.COOKIES.get('display_name')
 	user_cover_image = request.COOKIES.get('user_cover_image')
 
 	tokens = {
@@ -15,7 +17,7 @@ def welcome(request):
 		'refresh_token': refresh_token,
 		'expires_in': expires_in
 	}
-	if(access_token != None and refresh_token != None and expires_in != None and spotify_id != None and user_cover_image != None):
+	if(access_token != None and refresh_token != None and expires_in != None and spotify_id != None and display_name != None and user_cover_image != None):
 		newTokens = checkSpotifyAuthentication(tokens)
 		if(newTokens == None):
 			pass
@@ -40,6 +42,7 @@ def welcome(request):
 		response.set_cookie('refresh_token', refresh_token, cookie_max_age, samesite='Lax')
 		response.set_cookie('expires_in', expires_in, cookie_max_age, samesite='Lax')
 		response.set_cookie('spotify_id', spotify_id, cookie_max_age, samesite='Lax')
+		response.set_cookie('display_name', display_name, cookie_max_age, samesite='Lax')
 		response.set_cookie('user_cover_image', user_cover_image, cookie_max_age, samesite='Lax')
 		return response
 	else:

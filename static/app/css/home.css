@@ -16,10 +16,45 @@ html{
 	font-family: sans-serif;
 }
 
-.song-swipe .title{
+.song-swipe .home-header{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+}
+.song-swipe .home-header .title{
 	font-size: 35px;
 	margin: 5% 0 5% 0;
 	color: purple;
+}
+.song-swipe .home-header .user-profile{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 0 20px;
+}
+.song-swipe .home-header .user-profile h1{
+	font-size: 28px;
+	font-weight: bold;
+	color: purple;
+}
+.song-swipe .home-header .user-profile img{
+	width: 60px;
+	height: 60px;
+	border-radius: 50%;
+}
+.song-swipe .home-header .user-profile button{
+	width: 100px;
+	height: 40px;
+	font-size: 15px;
+	background-color: mediumpurple;
+	color: white;
+	border: 1px solid mediumpurple;
+	border-radius: 15px;
+	cursor: pointer;
+}
+.song-swipe .home-header .user-profile button:hover{
+	background-color: purple;
 }
 
 .song-swipe .loading-element{
@@ -34,7 +69,7 @@ html{
 	justify-content: center;
 	align-items: flex-start;
 	gap: 0 8%;
-	margin: 5% 0 5% 0;
+	margin: 10% 0 5% 0;
 }
 
 .song-swipe .song-pair-container .divider-or{

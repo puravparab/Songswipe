@@ -102,6 +102,7 @@ def callback(request, format=None):
 		response.set_cookie('expires_in', expires_in, cookie_max_age, samesite='Lax')
 		response.set_cookie('refresh_token', refresh_token, cookie_max_age, samesite='Lax')
 		response.set_cookie('spotify_id', userData.get('spotify_id'), cookie_max_age, samesite='Lax')
+		response.set_cookie('display_name', userData.get('display_name'), cookie_max_age, samesite='Lax')
 		response.set_cookie('user_cover_image', user_cover_image, cookie_max_age, samesite='Lax')
 
 		return response
