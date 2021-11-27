@@ -1,5 +1,5 @@
 const ROOT_URL = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port
-const cookies = document.cookie.split("; ")
+var cookies = document.cookie.split("; ")
 
 // Request lsit of song pairs from the find api endpoint
 var getSongPairs = async () => {
@@ -322,7 +322,25 @@ window.onLoad = getSongPairs()
 
 		// Save left song when icon is clicked
 		saveL.addEventListener("click", () => {
+			var cookies = document.cookie.split("; ")
+			var access_token = cookies.find(row => row.startsWith('access_token=')).split("=")[1]
+			var refresh_token = cookies.find(row => row.startsWith('refresh_token=')).split("=")[1]
+			var expires_in = cookies.find(row => row.startsWith('expires_in=')).split("=")[1].slice(1,-1)
+			var song_id = songPair[0]["id"]
 			if(saveLClicked === false){
+				// Add song to the top of the library
+				fetch(ROOT_URL + '/spotify/api/user/saved-tracks/add/', {
+					method: 'PUT',
+					headers:{
+						'Content-Type':'application/json'
+					},
+					body: JSON.stringify({
+						access_token: access_token,
+   						refresh_token: refresh_token,
+    					expires_in: expires_in,
+    					ids: song_id
+					})
+				})
 				saveL.src = "/static/app/assets/images/svg/heart_red.svg"
 				saveLClicked = true
 			}
@@ -333,7 +351,25 @@ window.onLoad = getSongPairs()
 		});
 		// Save right song when icon is clicked
 		saveR.addEventListener("click", () => {
+			var cookies = document.cookie.split("; ")
+			var access_token = cookies.find(row => row.startsWith('access_token=')).split("=")[1]
+			var refresh_token = cookies.find(row => row.startsWith('refresh_token=')).split("=")[1]
+			var expires_in = cookies.find(row => row.startsWith('expires_in=')).split("=")[1].slice(1,-1)
+			var song_id = songPair[1]["id"]
 			if(saveRClicked === false){
+				// Add song to the top of the library
+				fetch(ROOT_URL + '/spotify/api/user/saved-tracks/add/', {
+					method: 'PUT',
+					headers:{
+						'Content-Type':'application/json'
+					},
+					body: JSON.stringify({
+						access_token: access_token,
+   						refresh_token: refresh_token,
+    					expires_in: expires_in,
+    					ids: song_id
+					})
+				})
 				saveR.src = "/static/app/assets/images/svg/heart_red.svg"
 				saveRClicked = true
 			}

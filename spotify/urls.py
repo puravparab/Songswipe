@@ -29,4 +29,5 @@ urlpatterns = [
     path('api/user/', currentUserProfile, name='spotify-api-user'),
     path('api/user/saved-tracks/<int:limit>/<int:offset>/', userSavedTracks.as_view(), name='spotify-api-user-saved-tracks'),
     path('api/user/saved-tracks/check/', verifyTracksSaved.as_view(), name='spotify-api-user-saved-tracks-check'),
+    path('api/user/saved-tracks/add/', addTracksToLibrary.as_view(), name='spotify-api-user-saved-tracks-add'),
 ]
