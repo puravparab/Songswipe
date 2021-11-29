@@ -273,14 +273,14 @@ window.onLoad = getSongPairs()
 		// Hide loading element
 		loadingContainer.style.display = "none"
 
-		// Display the a pair of songs
-		display(songPair)
-
 		// Display the songs
 		songPairContainer.style.display = "flex"
 
+		// Display the a pair of songs
+		display(songPair)
+
 		// Results
-		var results = {}
+		var results = data
 
 		// If song on tbe left is selected
 		optionOneBtn.addEventListener("click", () => {
@@ -289,6 +289,9 @@ window.onLoad = getSongPairs()
 				location.reload();
 			}
 			else{
+				// Update results
+				results["pair_list"][index]["winner"] = 0
+				// Next Pair
 				index = index + 1
 				songPair = data["pair_list"][index]
 				display(songPair)
@@ -301,6 +304,9 @@ window.onLoad = getSongPairs()
 				location.reload();
 			}
 			else{
+				// Update results
+				results["pair_list"][index]["winner"] = 1
+				// Next Pair
 				index = index + 1
 				songPair = data["pair_list"][index]
 				display(songPair)
