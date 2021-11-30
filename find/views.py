@@ -1,14 +1,17 @@
 from django.shortcuts import render
-from requests import get
+from requests import get, post
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.parsers import JSONParser
 from spotify.utils import checkSpotifyAuthentication
 import random
 
 # Api that gets pairs of songs and accepts results of swipes
 # TODO: make sure one pair doesnt have the same songs
 class find(APIView):
+	parser_classes = [JSONParser]
+
 	def get(self, request, format=None):
 		access_token = request.COOKIES.get('access_token')
 		refresh_token = request.COOKIES.get('refresh_token')
@@ -192,6 +195,11 @@ class find(APIView):
 		response.set_cookie('expires_in', expires_in, cookie_max_age, samesite='Lax')
 		return response
 
+	def post(self, request, format=None):
+		data = request.data.get("pair_data")
+		results = request.data.get("results")
+		return Response({}, status=status.HTTP_200_OK)
+
 	# Validate tokens
 	def authCheck(self, tokens):
 		access_token = tokens.get('access_token')
@@ -206,3 +214,4 @@ class find(APIView):
 		# Check if Spotify is authenticated
 		newTokens = checkSpotifyAuthentication(tokens)
 		return newTokens
+

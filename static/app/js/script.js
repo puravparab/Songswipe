@@ -280,17 +280,28 @@ window.onLoad = getSongPairs()
 		display(songPair)
 
 		// Results
-		var results = data
+		var results = {"winners": []}
 
 		// If song on tbe left is selected
 		optionOneBtn.addEventListener("click", () => {
 			// If there are no more song pairs reload the site
 			if(index > total_pairs - 2){
+				// Send results for processing
+				fetch(ROOT_URL + '/find/', {
+					method: 'POST',
+					headers:{
+						'Content-Type':'application/json'
+					},
+					body: JSON.stringify({
+						pair_data: data,
+						results: results
+					})
+				})
 				location.reload();
 			}
 			else{
 				// Update results
-				results["pair_list"][index]["winner"] = 0
+				results["winners"][index] = 0
 				// Next Pair
 				index = index + 1
 				songPair = data["pair_list"][index]
@@ -301,11 +312,22 @@ window.onLoad = getSongPairs()
 		optionTwoBtn.addEventListener("click", () => {
 			// If there are no more song pairs reload the site
 			if(index > total_pairs - 2){
+				// Send results for processing
+				fetch(ROOT_URL + '/find/', {
+					method: 'POST',
+					headers:{
+						'Content-Type':'application/json'
+					},
+					body: JSON.stringify({
+						pair_data: data,
+						results: results
+					})
+				})
 				location.reload();
 			}
 			else{
 				// Update results
-				results["pair_list"][index]["winner"] = 1
+				results["winners"][index] = 1
 				// Next Pair
 				index = index + 1
 				songPair = data["pair_list"][index]
