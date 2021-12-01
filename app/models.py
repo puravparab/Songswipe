@@ -22,3 +22,9 @@ class User(models.Model):
 
 	def __str__(self):
 		return (f"{self.spotify_id} (id:{self.id})")
+
+class Song(models.Model):
+	song_id = models.CharField(max_length=200, unique=True, blank=False)
+	song_name = models.CharField(max_length=200, unique=True, null=True)
+	points = models.DecimalField(max_digits=15, decimal_places=5, null=True)
+	created_at = models.DateTimeField(auto_now_add=True, auto_now=False)

@@ -198,6 +198,30 @@ class find(APIView):
 	def post(self, request, format=None):
 		data = request.data.get("pair_data")
 		results = request.data.get("results")
+		print(results)
+
+		index = 0
+		for pair in data.get("pair_list"):
+			print(index)
+			winner = results.get("winners")[index]
+			if(winner == 0):
+				loser = 1
+			else:
+				loser = 0
+
+			id_A = data.get("pair_list")[index][0].get("id")
+			popularity_A = data.get("pair_list")[index][0].get("popularity")
+			id_B = data.get("pair_list")[index][1].get("id")
+			popularity_B = data.get("pair_list")[index][1].get("popularity")
+			id_list = [id_A, id_B]
+			popularity = [popularity_A, popularity_B]
+			points_diff_winner = 1 * (popularity[winner]/100)
+			points_diff_loser = -1 * (popularity[loser]/100)
+
+			print(f'{data.get("pair_list")[index][winner].get("name")}:{points_diff_winner}')
+			print(f'{data.get("pair_list")[index][loser].get("name")}:{points_diff_loser}')
+			index += 1
+
 		return Response({}, status=status.HTTP_200_OK)
 
 	# Validate tokens
@@ -214,4 +238,3 @@ class find(APIView):
 		# Check if Spotify is authenticated
 		newTokens = checkSpotifyAuthentication(tokens)
 		return newTokens
-

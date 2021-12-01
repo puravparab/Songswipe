@@ -286,6 +286,7 @@ window.onLoad = getSongPairs()
 		optionOneBtn.addEventListener("click", () => {
 			// If there are no more song pairs reload the site
 			if(index > total_pairs - 2){
+				results["winners"][index] = 0
 				// Send results for processing
 				fetch(ROOT_URL + '/find/', {
 					method: 'POST',
@@ -312,6 +313,7 @@ window.onLoad = getSongPairs()
 		optionTwoBtn.addEventListener("click", () => {
 			// If there are no more song pairs reload the site
 			if(index > total_pairs - 2){
+				results["winners"][index] = 1
 				// Send results for processing
 				fetch(ROOT_URL + '/find/', {
 					method: 'POST',
