@@ -9,7 +9,9 @@ from app.models import Song
 import random
 
 # Api that gets pairs of songs and accepts results of swipes
-# TODO: make sure one pair doesnt have the same songs
+# TODO: Make sure one pair doesnt have the same songs
+#       Add more variety for songs
+#       Update ranking algorithm
 class find(APIView):
 	parser_classes = [JSONParser]
 
