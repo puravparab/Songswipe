@@ -199,13 +199,13 @@ class find(APIView):
 	def post(self, request, format=None):
 		data = request.data.get("pair_data")
 		results = request.data.get("results")
-		print("asdas")
-		print(results)
+		# print(results)
 
+		# Process points obtained from frontend
 		Points = {}
 		index = 0
 		for pair in data.get("pair_list"):
-			print(index)
+			# print(index)
 			winner = results.get("winners")[index]
 			if(winner == 0):
 				loser = 1
@@ -238,13 +238,14 @@ class find(APIView):
 					'display_name': data.get("pair_list")[index][loser].get("name")
 				}
 
-			print(f'{data.get("pair_list")[index][winner].get("name")}:{points_diff_winner}')
-			print(f'{data.get("pair_list")[index][loser].get("name")}:{points_diff_loser}')
+			# print(f'{data.get("pair_list")[index][winner].get("name")}:{points_diff_winner}')
+			# print(f'{data.get("pair_list")[index][loser].get("name")}:{points_diff_loser}')
 
 			index += 1
 
-		print(Points)
+		# print(Points)
 
+		# Create of Update Song model
 		for song_id, items in Points.items():
 			song = Song.objects.filter(song_id=song_id)
 			if song:
