@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from spotify.utils import checkSpotifyAuthentication
+from app.models import Song
 import random
 
 # Api that gets pairs of songs and accepts results of swipes
@@ -198,8 +199,10 @@ class find(APIView):
 	def post(self, request, format=None):
 		data = request.data.get("pair_data")
 		results = request.data.get("results")
+		print("asdas")
 		print(results)
 
+		Points = {}
 		index = 0
 		for pair in data.get("pair_list"):
 			print(index)
@@ -215,12 +218,46 @@ class find(APIView):
 			popularity_B = data.get("pair_list")[index][1].get("popularity")
 			id_list = [id_A, id_B]
 			popularity = [popularity_A, popularity_B]
+
 			points_diff_winner = 1 * (popularity[winner]/100)
 			points_diff_loser = -1 * (popularity[loser]/100)
 
+			if(Points.get(id_list[winner]) != None):
+				Points[id_list[winner]]["points"] = Points.get(id_list[winner]).get("points") + points_diff_winner
+			else:
+				Points[id_list[winner]] = {
+					'points': points_diff_winner,
+					'display_name': data.get("pair_list")[index][winner].get("name")
+				}
+
+			if(Points.get(id_list[loser]) != None):
+				Points[id_list[loser]]["points"] = Points.get(id_list[loser]).get("points") + points_diff_loser
+			else:
+				Points[id_list[loser]] = {
+					'points': points_diff_loser,
+					'display_name': data.get("pair_list")[index][loser].get("name")
+				}
+
 			print(f'{data.get("pair_list")[index][winner].get("name")}:{points_diff_winner}')
 			print(f'{data.get("pair_list")[index][loser].get("name")}:{points_diff_loser}')
+
 			index += 1
+
+		print(Points)
+
+		for song_id, items in Points.items():
+			song = Song.objects.filter(song_id=song_id)
+			if song:
+				song = song[0]
+				song.points = song.points + items.get("points")
+				song.save(update_fields=['points'])
+			else:
+				song = Song(
+					song_id = song_id,
+					song_name = items.get("display_name"),
+					points = items.get("points")
+				)
+				song.save()
 
 		return Response({}, status=status.HTTP_200_OK)
 

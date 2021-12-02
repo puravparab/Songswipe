@@ -19,6 +19,7 @@ var loadingContainer = document.querySelector(".loading-container")
 // Find the values of display name and cover image
 var display_name = cookies.find(row => row.startsWith('display_name=')).split("=")[1]
 var user_cover_image = cookies.find(row => row.startsWith('user_cover_image=')).split("=")[1].slice(1,-1)
+var csrftoken = cookies.find(row => row.startsWith('csrftoken=')).split("=")[1]
 
 // Create elements for the right side of the top header
 var userProfileHeader = document.createElement("div")
@@ -291,7 +292,8 @@ window.onLoad = getSongPairs()
 				fetch(ROOT_URL + '/find/', {
 					method: 'POST',
 					headers:{
-						'Content-Type':'application/json'
+						'Content-Type':'application/json',
+						'X-CSRFToken': csrftoken
 					},
 					body: JSON.stringify({
 						pair_data: data,
@@ -318,7 +320,8 @@ window.onLoad = getSongPairs()
 				fetch(ROOT_URL + '/find/', {
 					method: 'POST',
 					headers:{
-						'Content-Type':'application/json'
+						'Content-Type':'application/json',
+						'X-CSRFToken': csrftoken
 					},
 					body: JSON.stringify({
 						pair_data: data,
