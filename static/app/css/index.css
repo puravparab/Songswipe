@@ -20,6 +20,12 @@ body{
 
 .welcome-main{
 	display: flex;
+	flex-direction: column;
+	gap: 40px 0px;
+}
+
+.welcome-main .welcome-top{
+	display: flex;
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
@@ -28,13 +34,13 @@ body{
 	margin: auto;
 }
 
-.welcome-main h1{
+.welcome-main .welcome-top h1{
 	margin: 0;
 	font-size: 60px;
 	color: darkviolet;
 }
 
-.welcome-main a{
+.welcome-main .welcome-top a{
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
@@ -49,7 +55,23 @@ body{
 	text-decoration: none;
 }
 
-.welcome-main a:hover{
+.welcome-main .welcome-top a:hover{
 	background-color: orange;
 	transition: 0.1s;
+}
+
+.welcome-main .welcome-bottom{
+	display: flex;
+	flex-direction: column;
+}
+
+.welcome-main .welcome-bottom p{
+	margin: 0px;
+	font-size: 25px;
+	text-align: center;
+}
+
+.welcome-main .welcome-bottom p a{
+	color: rgb(31 108 203);
+	text-decoration: none;
 }

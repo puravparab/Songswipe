@@ -8,8 +8,16 @@
 {% block header %}
 	<div class="welcome-container">
 		<div class="welcome-main">
-			<h1>SongSwipe</h1>
-			<a href="{% url 'spotify:spotify-authentication' %}">LOG INTO SPOTIFY</a>
+			<div class="welcome-top">
+				<h1>SongSwipe</h1>
+				<a href="{% url 'spotify:spotify-authentication' %}">LOG INTO SPOTIFY</a>
+			</div>
+
+			<div class="welcome-bottom">
+				<p>
+					<a href="mailto:puravparabdev@gmail.com">Contact me</a> for access
+				</p>
+			</div>	
 		</div>
 	</div>
 {% endblock %}
