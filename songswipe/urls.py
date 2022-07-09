@@ -19,7 +19,7 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('app.urls', namespace='main-app')),
-    path('app/', include('app.urls', namespace='main-app')),
+    path('app/', include('app.urls', namespace='app')),
     path('find/', include('find.urls', namespace='find')),
     path('spotify/', include('spotify.urls', namespace='spotify')),
 ]
