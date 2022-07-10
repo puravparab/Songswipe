@@ -8,7 +8,7 @@ from pathlib import Path
 # From environ package
 import environ
 
-from HumanCap.settings.dev import *
+from .dev import *
 
 env = environ.Env(
     # set casting, default value

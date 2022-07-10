@@ -10,6 +10,8 @@ whitenoise = "*"
 python-environ = "*"
 djangorestframework = "*"
 requests = "*"
+gunicorn = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 
