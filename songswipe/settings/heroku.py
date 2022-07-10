@@ -8,7 +8,7 @@ from pathlib import Path
 # From environ package
 import environ
 
-from .dev import *
+from songswipe.settings.dev import *
 
 env = environ.Env(
     # set casting, default value
