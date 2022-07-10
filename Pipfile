@@ -7,11 +7,11 @@ name = "pypi"
 django = "==3.2.8"
 python-dotenv = "*"
 whitenoise = "*"
-python-environ = "*"
 djangorestframework = "*"
 requests = "*"
 gunicorn = "*"
 psycopg2 = "*"
+django-environ = "*"
 
 [dev-packages]
 
