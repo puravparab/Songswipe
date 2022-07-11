@@ -137,10 +137,16 @@ class executeSpotifyAPIRequest(APIView):
 			'ids': request.data.get('ids')
 		}
 		# request the Spotify API at the endpoint
-		response = get(BASE_URL + endpoint, headers=headers, params=params)
+		try:
+			response = get(BASE_URL + endpoint, headers=headers, params=params)
+		except Exception as e:
+			print(f'executeAPI:{str(e)}')
+			return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 		if(response.ok):
 			return Response(response.json(), status=status.HTTP_200_OK)
 		else:
+			print('execute fetching nothing')
 			return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
 	def put(self, request, format=None):
