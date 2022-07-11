@@ -157,10 +157,16 @@ class executeSpotifyAPIRequest(APIView):
 			'ids': request.data.get('ids')
 		}
 		# request the Spotify API at the endpoint
-		response = put(BASE_URL + endpoint, headers=headers, params=params)
+		try:
+			response = put(BASE_URL + endpoint, headers=headers, params=params)
+		except Exception as e:
+			print(f'executeAPI:{str(e)}')
+			return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 		if(response.ok):
 			return Response(response, status=status.HTTP_200_OK)
 		else:
+			print('execute fetching nothing')
 			return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
 # 
@@ -205,9 +211,9 @@ def currentUserProfile(request, format=None):
 		except:
 			return Response({'Error: Call to executeSpotifyAPIRequest Failed'}, status=status.HTTP_400_BAD_REQUEST)
 
-		print(f'spotify_response:{spotifyResponse}')
 		# Process spotifyResponse
 		if(spotifyResponse.ok):
+			print(f'spotify_response:{spotifyResponse.json()}')
 			# Clean JSON Response
 			spotifyResponse = spotifyResponse.json()
 			# If image does not exist
@@ -228,7 +234,9 @@ def currentUserProfile(request, format=None):
 			}
 			return Response(response, status=status.HTTP_200_OK)
 		else:
-			return Response(spotifyResponse.json(), status=status.HTTP_400_BAD_REQUEST)
+			# return Response(spotifyResponse.json(), status=status.HTTP_400_BAD_REQUEST)
+			print(f'spotify_response:{spotifyResponse}')
+			return Response({'error': spotifyResponse}, status=status.HTTP_400_BAD_REQUEST)
 
 # Get user's saved tracks
 # https://developer.spotify.com/documentation/web-api/reference/#/operations/get-users-saved-tracks

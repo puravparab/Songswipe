@@ -25,6 +25,7 @@ def isSpotifyAuthenticated(tokens):
 
 # Use refresh token to get a new access token
 def refreshSpotifyToken(refresh_token):
+	print('tokens refreshed')
 	response = post('https://accounts.spotify.com/api/token',
 		data={
 			'grant_type': 'refresh_token',
