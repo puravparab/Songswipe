@@ -34,6 +34,7 @@ def callback(request, format=None):
 	code = request.GET.get('code')
 	error = request.GET.get('error')
 
+	print(f'code:{code}')
 	if code != None:
 		# Request access tokens and refresh tokens
 		response = post('https://accounts.spotify.com/api/token',
@@ -45,6 +46,7 @@ def callback(request, format=None):
 				'client_secret': settings.SPOTIFY_CLIENT_SECRET,
 			}).json()
 
+		print(f'response:{response}')
 		# Response with token data
 		access_token = response.get('access_token')
 		token_type = response.get('token_type')
@@ -59,6 +61,7 @@ def callback(request, format=None):
 
 		# Connect User Model here
 		ROOT_URL = request.build_absolute_uri('/')
+		print(f'ROOT_URL:{ROOT_URL}')
 		userData = get((f'{ROOT_URL}spotify/api/user/'),
 			json={
 				'access_token': access_token,
@@ -92,6 +95,7 @@ def callback(request, format=None):
 				userProfile.save()
 			user_cover_image = userData.get('image')
 		else:
+			print('redirecting...')
 			return redirect('main-app:app-welcome')
 
 		# Create cookies with token data:
@@ -105,6 +109,7 @@ def callback(request, format=None):
 		response.set_cookie('display_name', userData.get('display_name'), cookie_max_age, samesite='Lax')
 		response.set_cookie('user_cover_image', user_cover_image, cookie_max_age, samesite='Lax')
 
+		print(f'response:{response}')
 		return response
 
 	elif error != None:
@@ -133,6 +138,7 @@ class executeSpotifyAPIRequest(APIView):
 		# request the Spotify API at the endpoint
 		response = get(BASE_URL + endpoint, headers=headers, params=params)
 		if(response.ok):
+			print(response.json())
 			return Response(response.json(), status=status.HTTP_200_OK)
 		else:
 			return Response(response, status=status.HTTP_400_BAD_REQUEST)
