@@ -71,6 +71,7 @@ def callback(request, format=None):
 			headers={
 				'Content-type': 'application/json'
 			})
+		print(f'user_data:{userData}')
 		if(userData.ok):
 			userData = userData.json()
 			userProfile = User.objects.filter(spotify_id=userData.get('spotify_id'))
@@ -109,7 +110,7 @@ def callback(request, format=None):
 		response.set_cookie('display_name', userData.get('display_name'), cookie_max_age, samesite='Lax')
 		response.set_cookie('user_cover_image', user_cover_image, cookie_max_age, samesite='Lax')
 
-		print(f'response:{response}')
+		print(f'response_callback:{response}')
 		return response
 
 	elif error != None:
@@ -138,7 +139,6 @@ class executeSpotifyAPIRequest(APIView):
 		# request the Spotify API at the endpoint
 		response = get(BASE_URL + endpoint, headers=headers, params=params)
 		if(response.ok):
-			print(response.json())
 			return Response(response.json(), status=status.HTTP_200_OK)
 		else:
 			return Response(response, status=status.HTTP_400_BAD_REQUEST)
@@ -205,6 +205,7 @@ def currentUserProfile(request, format=None):
 		except:
 			return Response({'Error: Call to executeSpotifyAPIRequest Failed'}, status=status.HTTP_400_BAD_REQUEST)
 
+		print(f'spotify_response:{spotifyResponse}')
 		# Process spotifyResponse
 		if(spotifyResponse.ok):
 			# Clean JSON Response
