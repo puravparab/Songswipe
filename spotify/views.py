@@ -34,7 +34,6 @@ def callback(request, format=None):
 	code = request.GET.get('code')
 	error = request.GET.get('error')
 
-	print(f'code:{code}')
 	if code != None:
 		# Request access tokens and refresh tokens
 		response = post('https://accounts.spotify.com/api/token',
@@ -46,7 +45,6 @@ def callback(request, format=None):
 				'client_secret': settings.SPOTIFY_CLIENT_SECRET,
 			}).json()
 
-		print(f'response:{response}')
 		# Response with token data
 		access_token = response.get('access_token')
 		token_type = response.get('token_type')
@@ -61,7 +59,6 @@ def callback(request, format=None):
 
 		# Connect User Model here
 		ROOT_URL = request.build_absolute_uri('/')
-		print(f'ROOT_URL:{ROOT_URL}')
 		userData = get((f'{ROOT_URL}spotify/api/user/'),
 			json={
 				'access_token': access_token,
@@ -71,7 +68,6 @@ def callback(request, format=None):
 			headers={
 				'Content-type': 'application/json'
 			})
-		print(f'user_data:{userData}')
 		if(userData.ok):
 			userData = userData.json()
 			userProfile = User.objects.filter(spotify_id=userData.get('spotify_id'))
@@ -96,7 +92,6 @@ def callback(request, format=None):
 				userProfile.save()
 			user_cover_image = userData.get('image')
 		else:
-			print('redirecting...')
 			return redirect('main-app:app-welcome')
 
 		# Create cookies with token data:
@@ -110,7 +105,6 @@ def callback(request, format=None):
 		response.set_cookie('display_name', userData.get('display_name'), cookie_max_age, samesite='Lax')
 		response.set_cookie('user_cover_image', user_cover_image, cookie_max_age, samesite='Lax')
 
-		print(f'response_callback:{response}')
 		return response
 
 	elif error != None:
@@ -140,13 +134,11 @@ class executeSpotifyAPIRequest(APIView):
 		try:
 			response = get(BASE_URL + endpoint, headers=headers, params=params)
 		except Exception as e:
-			print(f'executeAPI:{str(e)}')
 			return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 		if(response.ok):
 			return Response(response.json(), status=status.HTTP_200_OK)
 		else:
-			print('execute fetching nothing')
 			return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
 	def put(self, request, format=None):
@@ -166,13 +158,11 @@ class executeSpotifyAPIRequest(APIView):
 		try:
 			response = put(BASE_URL + endpoint, headers=headers, params=params)
 		except Exception as e:
-			print(f'executeAPI:{str(e)}')
 			return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 		if(response.ok):
 			return Response(response, status=status.HTTP_200_OK)
 		else:
-			print('execute fetching nothing')
 			return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
 # 
@@ -219,7 +209,6 @@ def currentUserProfile(request, format=None):
 
 		# Process spotifyResponse
 		if(spotifyResponse.ok):
-			print(f'spotify_response:{spotifyResponse.json()}')
 			# Clean JSON Response
 			spotifyResponse = spotifyResponse.json()
 			# If image does not exist
@@ -241,7 +230,6 @@ def currentUserProfile(request, format=None):
 			return Response(response, status=status.HTTP_200_OK)
 		else:
 			# return Response(spotifyResponse.json(), status=status.HTTP_400_BAD_REQUEST)
-			print(f'spotify_response:{spotifyResponse}')
 			return Response({'error': spotifyResponse}, status=status.HTTP_400_BAD_REQUEST)
 
 # Get user's saved tracks

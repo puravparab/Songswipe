@@ -45,7 +45,6 @@ def welcome(request):
 		response.set_cookie('display_name', display_name, cookie_max_age, samesite='Lax')
 		response.set_cookie('user_cover_image', user_cover_image, cookie_max_age, samesite='Lax')
 		
-		print(f'response:{response}')
 		return response
 	else:
 		return render(request, 'app/welcome.html') 
