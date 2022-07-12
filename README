@@ -1,6 +1,6 @@
 <p align="center">
-	<img src="https://github.com/puravparab/Songswipe/blob/1a39812a5a3feef8b823157670a0defc0da48aa1/static/app/assets/images/apple-touch-icon.png"/>
-</p
+    <img src="https://github.com/puravparab/Songswipe/blob/1a39812a5a3feef8b823157670a0defc0da48aa1/static/app/assets/images/apple-touch-icon.png"/>
+</p>
 
 <p align="center">
 	<h1 align="center">
@@ -8,11 +8,11 @@
 	</h1>
 	<p align="center">
 		Swipe on songs
-	</p
-</p
+	</p>
+</p>
 
 <p align="center">
-	<a target="_blank" href="https://www.python.org/downloads/" title="Python version"><img src="https://img.shields.io/badge/python-%3E=_3.9-green.svg"></a>
+    <a target="_blank" href="https://www.python.org/downloads/" title="Python version"><img src="https://img.shields.io/badge/python-%3E=_3.9-green.svg"></a>
 	<a target="_blank" href="LICENSE" title="License: MIT"><img src="https://img.shields.io/badge/License-MIT-blue.svg"></a>
 </p>
 
